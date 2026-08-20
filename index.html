@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MITHULASHWARAN C — AI-ML Engineer & Data Scientist & Data Analyst</title>
+<title>MITHULASHWARAN C — AI-ML Engineer & Data Scientist & AI Agent Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:ital,wght@0,200;0,300;0,400;0,600;0,700;1,300&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<!-- Three.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 :root{
   --arc:#00d4ff;--arc2:#0099ee;--arc3:#0055bb;
@@ -79,20 +83,77 @@ nav.show{opacity:1;transform:translateY(0)}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
 
 /* HERO */
-#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 40px 80px;position:relative;z-index:10;opacity:0;transform:translateY(18px);transition:all 1s cubic-bezier(.16,1,.3,1) .3s}
+#hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:110px 40px 80px;position:relative;z-index:10;opacity:0;transform:translateY(18px);transition:all 1s cubic-bezier(.16,1,.3,1) .3s}
 #hero.show{opacity:1;transform:translateY(0)}
-.hbrow{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:5px;color:var(--arc);text-transform:uppercase;margin-bottom:26px;display:flex;align-items:center;gap:16px;justify-content:center}
+.hbrow{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:5px;color:var(--arc);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:16px;justify-content:center}
 .hbrow::before,.hbrow::after{content:'';width:55px;height:1px}
 .hbrow::before{background:linear-gradient(90deg,transparent,var(--arc))}
 .hbrow::after{background:linear-gradient(90deg,var(--arc),transparent)}
-.hname{font-family:'Orbitron',monospace;font-size:clamp(28px,7vw,84px);font-weight:900;line-height:.95;letter-spacing:-1px;color:var(--tbright);text-shadow:0 0 80px rgba(0,212,255,.15);margin-bottom:18px}
+.hname{font-family:'Orbitron',monospace;font-size:clamp(28px,7vw,80px);font-weight:900;line-height:.95;letter-spacing:-1px;color:var(--tbright);text-shadow:0 0 80px rgba(0,212,255,.15);margin-bottom:16px}
 .hname span{display:block;background:linear-gradient(130deg,#fff 0%,#b0e8ff 35%,var(--arc) 65%,var(--arc2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.htitles{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:36px;flex-wrap:wrap}
-.htitle{font-family:'Exo 2',sans-serif;font-size:clamp(13px,2vw,20px);font-weight:300;letter-spacing:5px;color:var(--arc);text-transform:uppercase}
+.htitles{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:24px;flex-wrap:wrap}
+.htitle{font-family:'Exo 2',sans-serif;font-size:clamp(13px,2vw,19px);font-weight:300;letter-spacing:4px;color:var(--arc);text-transform:uppercase}
 .hsep{width:4px;height:4px;background:var(--arc);border-radius:50%;box-shadow:0 0 8px var(--arc)}
-.hdesc{font-family:'Exo 2',sans-serif;font-size:clamp(14px,1.6vw,17px);font-weight:300;color:var(--tdim);max-width:650px;line-height:2;margin-bottom:44px}
+
+/* 3D HERO AI CORE CONTAINER */
+.hero-3d-stage{
+  position:relative;
+  width:100%;
+  max-width:440px;
+  height:320px;
+  margin:10px auto 24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+#hero-3d-canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  cursor:grab;
+  z-index:2;
+}
+#hero-3d-canvas:active{cursor:grabbing}
+.hero-3d-hud{
+  position:absolute;
+  bottom:6px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:rgba(0,16,38,.85);
+  border:1px solid rgba(0,212,255,.25);
+  padding:5px 14px;
+  border-radius:3px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:9px;
+  letter-spacing:2px;
+  color:var(--arc);
+  pointer-events:none;
+  z-index:3;
+  backdrop-filter:blur(6px);
+  white-space:nowrap;
+}
+.hero-3d-hud-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn);animation:blink 1.5s infinite;
+}
+.hero-3d-brackets{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+}
+.hero-3d-brackets::before,.hero-3d-brackets::after{
+  content:'';position:absolute;width:18px;height:18px;border-color:rgba(0,212,255,.3);border-style:solid;
+}
+.hero-3d-brackets::before{top:0;left:0;border-width:2px 0 0 2px}
+.hero-3d-brackets::after{bottom:0;right:0;border-width:0 2px 2px 0}
+
+.hdesc{font-family:'Exo 2',sans-serif;font-size:clamp(14px,1.6vw,17px);font-weight:300;color:var(--tdim);max-width:680px;line-height:1.9;margin-bottom:38px}
 .hdesc strong{color:var(--txt);font-weight:600}
-.hbtns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:54px}
+.hbtns{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;margin-bottom:44px;position:relative;z-index:5}
 .btn{position:relative;padding:13px 38px;font-family:'Exo 2',sans-serif;font-size:12px;font-weight:700;letter-spacing:4px;text-transform:uppercase;text-decoration:none;cursor:none;overflow:hidden;transition:all .3s;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
 .btnp{background:transparent;border:1.5px solid var(--arc);color:var(--arc)}
 .btnp::before{content:'';position:absolute;inset:0;background:var(--arc);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
@@ -131,11 +192,50 @@ nav.show{opacity:1;transform:translateY(0)}
 .snum2{font-family:'Orbitron',monospace;font-size:30px;font-weight:900;color:var(--arc);text-shadow:var(--gsm);line-height:1;margin-bottom:4px}
 .slbl{font-family:'Exo 2',sans-serif;font-size:11px;font-weight:600;color:var(--tdim);letter-spacing:2px;text-transform:uppercase}
 
-/* PROJECTS */
-.pl{display:flex;flex-direction:column;gap:22px}
-.pc{position:relative;overflow:hidden;border:1px solid rgba(0,212,255,.14);background:var(--panel);padding:30px 34px;display:grid;grid-template-columns:1fr 96px;gap:22px;align-items:start;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));transition:all .4s cubic-bezier(.16,1,.3,1)}
-.pc::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--arc),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
-.pc:hover{border-color:rgba(0,212,255,.35);transform:translateY(-4px)}.pc:hover::before{transform:scaleX(1)}
+/* 3D PROJECT CARDS WITH PERSPECTIVE TILT */
+.pl{display:flex;flex-direction:column;gap:26px;perspective:1200px}
+.pc{
+  position:relative;
+  border:1px solid rgba(0,212,255,.16);
+  background:var(--panel);
+  padding:32px 34px;
+  display:grid;
+  grid-template-columns:1fr 96px;
+  gap:22px;
+  align-items:start;
+  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));
+  transform-style:preserve-3d;
+  transition:transform .2s ease-out, border-color .3s, box-shadow .3s;
+  will-change:transform;
+}
+.pc::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:2px;
+  background:linear-gradient(90deg,var(--arc),transparent);
+  transform:scaleX(0);
+  transform-origin:left;
+  transition:transform .4s;
+  z-index:2;
+}
+.pc:hover{
+  border-color:rgba(0,212,255,.45);
+  box-shadow:0 12px 35px rgba(0,10,25,.6),0 0 20px rgba(0,212,255,.12);
+}
+.pc:hover::before{transform:scaleX(1)}
+/* Glare overlay */
+.pc-glare{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(circle 350px at var(--gx, 50%) var(--gy, 50%), rgba(0,212,255,.12), transparent 70%);
+  opacity:0;
+  transition:opacity .3s;
+  z-index:1;
+}
+.pc:hover .pc-glare{opacity:1}
+
 .ptag{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--arc);border:1px solid rgba(0,212,255,.25);background:rgba(0,212,255,.06);padding:4px 12px;margin-bottom:12px}
 .pdot{width:5px;height:5px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn);animation:blink 1.5s infinite}
 .ptitle{font-family:'Orbitron',monospace;font-size:16px;font-weight:700;color:var(--tbright);letter-spacing:1px;margin-bottom:10px;line-height:1.3}
@@ -146,11 +246,223 @@ nav.show{opacity:1;transform:translateY(0)}
 .phts li strong{color:var(--arc);font-weight:600}
 .trow{display:flex;flex-wrap:wrap;gap:7px}
 .tp{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--gold);border:1px solid rgba(245,166,35,.28);background:rgba(245,166,35,.06);padding:3px 9px}
-.plnk{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-decoration:none;padding:14px 12px;border:1px solid rgba(0,212,255,.28);color:var(--arc);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;transition:all .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);height:fit-content;align-self:center}
+.plnk{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-decoration:none;padding:14px 12px;border:1px solid rgba(0,212,255,.28);color:var(--arc);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;transition:all .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);height:fit-content;align-self:center;position:relative;z-index:3}
 .plnk svg{width:17px;height:17px}
 .plnk:hover{background:rgba(0,212,255,.1);box-shadow:0 0 20px rgba(0,212,255,.2)}
 
-/* SKILLS */
+/* 3D INTERACTIVE MULTI-AGENT CONTROL TOWER */
+.agent-3d-wrapper{
+  margin-top:22px;
+  border:1px solid rgba(0,212,255,.25);
+  background:rgba(0,10,25,.88);
+  border-radius:4px;
+  overflow:hidden;
+  position:relative;
+}
+.agent-3d-header{
+  padding:12px 18px;
+  background:rgba(0,20,45,.75);
+  border-bottom:1px solid rgba(0,212,255,.15);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+}
+.agent-3d-title{
+  font-family:'Orbitron',monospace;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:2px;
+  color:var(--arc);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.agent-3d-status{
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;
+  color:var(--grn);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.agent-pipeline-flow{
+  padding:10px 18px;
+  background:rgba(0,14,32,.9);
+  border-bottom:1px solid rgba(0,212,255,.1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;
+  color:var(--tdim);
+  letter-spacing:1.5px;
+  flex-wrap:wrap;
+}
+.agent-pipeline-flow .af-node{
+  padding:3px 8px;
+  border:1px solid rgba(0,212,255,.2);
+  background:rgba(0,212,255,.05);
+  color:var(--arc);
+}
+.agent-pipeline-flow .af-node.core{
+  border-color:var(--arc);
+  color:#fff;
+  background:rgba(0,212,255,.15);
+  box-shadow:0 0 10px rgba(0,212,255,.3);
+}
+.agent-pipeline-flow .af-arr{color:rgba(0,212,255,.5)}
+
+.agent-3d-stage{
+  position:relative;
+  width:100%;
+  height:360px;
+  background:radial-gradient(circle at center, rgba(0,30,65,.5), rgba(2,9,18,.95) 75%);
+}
+#agent-network-canvas{
+  width:100%;
+  height:100%;
+  display:block;
+  cursor:grab;
+}
+#agent-network-canvas:active{cursor:grabbing}
+
+.agent-tooltip-hud{
+  position:absolute;
+  top:16px;
+  right:16px;
+  max-width:280px;
+  background:rgba(0,16,38,.92);
+  border:1px solid var(--arc);
+  box-shadow:0 0 20px rgba(0,212,255,.2);
+  padding:14px 16px;
+  pointer-events:none;
+  backdrop-filter:blur(10px);
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
+  transition:all .3s ease;
+  z-index:10;
+}
+.agent-tooltip-hud .ath-name{
+  font-family:'Orbitron',monospace;
+  font-size:11.5px;
+  font-weight:700;
+  color:var(--arc);
+  letter-spacing:1.5px;
+  margin-bottom:6px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.agent-tooltip-hud .ath-tech{
+  font-family:'Share Tech Mono',monospace;
+  font-size:9.5px;
+  color:var(--gold);
+  margin-bottom:6px;
+}
+.agent-tooltip-hud .ath-desc{
+  font-family:'Exo 2',sans-serif;
+  font-size:11.5px;
+  color:var(--txt);
+  line-height:1.5;
+}
+.agent-hud-instruction{
+  position:absolute;
+  bottom:10px;
+  left:16px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:9.5px;
+  letter-spacing:2px;
+  color:var(--tdim);
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+/* SKILLS SECTION WITH 3D INTERACTIVE NETWORK */
+.skills-control-bar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+  gap:14px;
+}
+.skills-mode-toggle{
+  display:flex;
+  gap:10px;
+  background:rgba(0,16,38,.8);
+  border:1px solid rgba(0,212,255,.2);
+  padding:4px;
+}
+.sm-btn{
+  padding:7px 18px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+  background:transparent;
+  border:1px solid transparent;
+  color:var(--tdim);
+  cursor:none;
+  transition:all .3s;
+}
+.sm-btn.active{
+  background:rgba(0,212,255,.15);
+  border-color:var(--arc);
+  color:var(--arc);
+  box-shadow:0 0 10px rgba(0,212,255,.25);
+}
+
+.skills-3d-container{
+  position:relative;
+  width:100%;
+  height:440px;
+  border:1px solid rgba(0,212,255,.2);
+  background:radial-gradient(circle at center, rgba(0,25,55,.6), rgba(2,9,18,.95) 75%);
+  margin-bottom:24px;
+  overflow:hidden;
+  border-radius:4px;
+}
+#skills-3d-canvas{
+  width:100%;
+  height:100%;
+  display:block;
+  cursor:grab;
+}
+#skills-3d-canvas:active{cursor:grabbing}
+.skills-3d-hud{
+  position:absolute;
+  top:16px;
+  left:16px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:10px;
+  letter-spacing:2px;
+  color:var(--arc);
+  pointer-events:none;
+  background:rgba(0,16,38,.85);
+  padding:6px 12px;
+  border-left:2px solid var(--arc);
+}
+.skills-3d-tooltip{
+  position:absolute;
+  bottom:16px;
+  right:16px;
+  background:rgba(0,16,38,.92);
+  border:1px solid var(--arc);
+  padding:10px 16px;
+  font-family:'Orbitron',monospace;
+  font-size:11px;
+  color:var(--tbright);
+  letter-spacing:2px;
+  pointer-events:none;
+  backdrop-filter:blur(8px);
+  opacity:0;
+  transition:opacity .2s ease;
+}
+.skills-3d-tooltip.show{opacity:1}
+
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
 .sc{padding:26px 22px;border:1px solid rgba(0,212,255,.13);background:var(--panel);position:relative;overflow:hidden;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 18px,100% 100%,0 100%);transition:border-color .3s}
 .sc::after{content:'';position:absolute;bottom:0;right:0;width:0;height:0;border-style:solid;border-width:0 0 18px 18px;border-color:transparent transparent rgba(0,212,255,.15) transparent}
@@ -215,6 +527,9 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
   .pc{grid-template-columns:1fr}
   footer{flex-direction:column;gap:10px;text-align:center;padding:22px}
   .hc{display:none}
+  .hero-3d-stage{height:270px;max-width:320px}
+  .agent-3d-stage{height:300px}
+  .skills-3d-container{height:350px}
 }
 </style>
 </head>
@@ -244,7 +559,7 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
 
 <!-- NAV -->
 <nav id="nav">
-  <div class="nbrand"><div class="ndot"></div>ML // AI ENGINEER</div>
+  <div class="nbrand"><div class="ndot"></div>ML // AI AGENT ENGINEER</div>
   <div class="nlinks">
     <a href="#about">ABOUT</a>
     <a href="#projects">PROJECTS</a>
@@ -262,9 +577,20 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
   <h1 class="hname"><span>MITHULASHWARAN C</span></h1>
   <div class="htitles">
     <span class="htitle">AI-ML Engineer</span><span class="hsep"></span>
-    <span class="htitle">Data Scientist</span><span class="hsep"></span>
-    <span class="htitle">Data Analyst</span>
+    <span class="htitle">AI Agent Developer</span><span class="hsep"></span>
+    <span class="htitle">Data Scientist</span>
   </div>
+
+  <!-- 3D INTERACTIVE AI CORE -->
+  <div class="hero-3d-stage">
+    <div class="hero-3d-brackets"></div>
+    <canvas id="hero-3d-canvas"></canvas>
+    <div class="hero-3d-hud" id="hero-core-hud">
+      <span class="hero-3d-hud-dot"></span>
+      <span id="hero-hud-text">3D AI CORE ONLINE // 100% NOMINAL</span>
+    </div>
+  </div>
+
   <p class="hdesc">
     Developing <strong>AI agents and intelligent automation systems for business</strong> — from autonomous workflows and decision engines to predictive models, real-time dashboards, and AI-powered analytics. Turning repetitive processes into scalable systems that help businesses work smarter.
   </p>
@@ -299,7 +625,9 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
   <div class="sh fu"><span class="snum">// 02</span><h2 class="stitle">DEPLOYED SYSTEMS</h2><div class="sline"></div></div>
   <div class="pl">
 
+    <!-- PROJECT 1 -->
     <div class="pc fu">
+      <div class="pc-glare"></div>
       <div>
         <div class="ptag"><span class="pdot"></span>LIVE · ANALYTICS DASHBOARD</div>
         <div class="ptitle">Dubai Real Estate Market Pulse</div>
@@ -317,7 +645,9 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
       </a>
     </div>
 
+    <!-- PROJECT 2 -->
     <div class="pc fu">
+      <div class="pc-glare"></div>
       <div>
         <div class="ptag"><span class="pdot"></span>LIVE · ML PLATFORM</div>
         <div class="ptitle">PropPredict AI — Airbnb Property Intelligence</div>
@@ -335,7 +665,9 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
       </a>
     </div>
 
+    <!-- PROJECT 3 -->
     <div class="pc fu">
+      <div class="pc-glare"></div>
       <div>
         <div class="ptag"><span class="pdot"></span>LIVE · AI BOT</div>
         <div class="ptitle">Personal Data Analyst AI Bot</div>
@@ -353,31 +685,75 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
       </a>
     </div>
 
-    <div class="pc fu">
+    <!-- PROJECT 4: LOGISTICS AI AGENT (WITH 3D MULTI-AGENT INTERACTIVE SYSTEM) -->
+    <div class="pc fu" style="grid-template-columns:1fr;">
+      <div class="pc-glare"></div>
       <div>
         <div class="ptag"><span class="pdot"></span>LIVE · AUTONOMOUS AI SYSTEM</div>
-        <div class="ptitle">Logistics AI Agent — Autonomous Dispatch System</div>
-        <p class="pdesc">Autonomous logistics control-tower system coordinating AI agents for route optimization, delay prediction, fleet health, driver assignment, and delivery operations.</p>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;margin-bottom:10px">
+          <div class="ptitle" style="margin-bottom:0">Logistics AI Agent — Autonomous Dispatch System</div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="plnk" href="https://logistics-ai-agent-hj8vem3uvzovub79xhwtkw.streamlit.app/" target="_blank">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              LIVE DEMO
+            </a>
+            <a class="plnk" href="https://github.com/MITHULASH7318/logistics-ai-agent" target="_blank">
+              <span style="font-size:15px">⚙</span>
+              GITHUB
+            </a>
+          </div>
+        </div>
+        <p class="pdesc">Autonomous logistics control-tower system coordinating 5 dedicated AI agents for route optimization, delay prediction, fleet health, driver assignment, and delivery operations.</p>
         <ul class="phts">
           <li>Built <strong>5 coordinated agents</strong>: real OSRM route optimization, Random Forest delay prediction, rule-based fleet health monitoring, nearest-driver matching, and a Groq/Llama 3.3 LLM coordinator</li>
           <li>Engineered a <strong>live control-tower dashboard</strong> with real-time map tracking, autonomous background agent loops, and automated delivery email notifications</li>
           <li>Deployed on <strong>free infrastructure</strong> using FastAPI, scikit-learn, Streamlit, OSRM, and Open-Meteo with zero paid API dependencies</li>
         </ul>
         <div class="trow"><span class="tp">FASTAPI</span><span class="tp">SCIKIT-LEARN</span><span class="tp">RANDOM FOREST</span><span class="tp">GROQ / LLAMA 3.3</span><span class="tp">OSRM</span><span class="tp">STREAMLIT</span></div>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:8px;align-self:center">
-        <a class="plnk" href="https://logistics-ai-agent-hj8vem3uvzovub79xhwtkw.streamlit.app/" target="_blank">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          LIVE DEMO
-        </a>
-        <a class="plnk" href="https://github.com/MITHULASH7318/logistics-ai-agent" target="_blank">
-          <span style="font-size:15px">⚙</span>
-          GITHUB
-        </a>
+
+        <!-- 3D INTERACTIVE MULTI-AGENT VISUALIZATION COMPONENT -->
+        <div class="agent-3d-wrapper">
+          <div class="agent-3d-header">
+            <div class="agent-3d-title">
+              <span>◈ 3D MULTI-AGENT ARCHITECTURE</span>
+              <span style="font-size:9px;color:var(--tdim);letter-spacing:1px">[INTERACTIVE TELEMETRY]</span>
+            </div>
+            <div class="agent-3d-status">
+              <span class="hero-3d-hud-dot"></span> 5 AGENTS SYNCHRONIZED
+            </div>
+          </div>
+          <div class="agent-pipeline-flow">
+            <span>USER INTENT</span>
+            <span class="af-arr">→</span>
+            <span class="af-node core">LLM COORDINATOR</span>
+            <span class="af-arr">→</span>
+            <span class="af-node">ROUTE</span>
+            <span class="af-node">DELAY</span>
+            <span class="af-node">FLEET</span>
+            <span class="af-node">DRIVER</span>
+            <span class="af-node">DISPATCH</span>
+            <span class="af-arr">→</span>
+            <span>AUTONOMOUS ACTION</span>
+          </div>
+          <div class="agent-3d-stage">
+            <canvas id="agent-network-canvas"></canvas>
+            <div class="agent-tooltip-hud" id="agent-tooltip">
+              <div class="ath-name" id="ath-title">AI CORE / LLM COORDINATOR</div>
+              <div class="ath-tech" id="ath-tech">GROQ // LLAMA 3.3 ORCHESTRATION</div>
+              <div class="ath-desc" id="ath-desc">Central cognitive engine analyzing dispatch parameters, orchestrating multi-agent decision loops, and formulating autonomous routing policies.</div>
+            </div>
+            <div class="agent-hud-instruction">
+              <span>✛ HOVER / CLICK NODES TO INSPECT AGENT MISSION & TELEMETRY • DRAG TO ROTATE 3D GRAPH</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
+    <!-- PROJECT 5 -->
     <div class="pc fu">
+      <div class="pc-glare"></div>
       <div>
         <div class="ptag"><span class="pdot"></span>LIVE · RAG SYSTEM</div>
         <div class="ptitle">Hospital Management RAG System</div>
@@ -401,7 +777,26 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
 <!-- SKILLS -->
 <div class="sw" id="skills"><div class="si">
   <div class="sh fu"><span class="snum">// 03</span><h2 class="stitle">TECHNICAL ARSENAL</h2><div class="sline"></div></div>
-  <div class="sg">
+
+  <div class="skills-control-bar fu">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--arc);letter-spacing:2px">
+      NEURAL CAPABILITY MATRIX // MULTI-DIMENSIONAL GRAPH
+    </div>
+    <div class="skills-mode-toggle">
+      <button class="sm-btn active" id="btn-skills-3d" onclick="setSkillsView('3d')">✦ 3D NEURAL MAP</button>
+      <button class="sm-btn" id="btn-skills-grid" onclick="setSkillsView('grid')">▦ CATEGORY MATRIX</button>
+    </div>
+  </div>
+
+  <!-- 3D INTERACTIVE SKILL CONSTELLATION -->
+  <div class="skills-3d-container fu" id="skills-3d-wrapper">
+    <canvas id="skills-3d-canvas"></canvas>
+    <div class="skills-3d-hud">INTERACTIVE SKILL CONSTELLATION • DRAG TO REVOLVE • HOVER TO ILLUMINATE</div>
+    <div class="skills-3d-tooltip" id="skills-3d-tooltip">AI / ML CORE</div>
+  </div>
+
+  <!-- CATEGORY GRID -->
+  <div class="sg" id="skills-grid-wrapper" style="display:none">
     <div class="sc fu"><div class="sci">📊</div><div class="sct">Data Analysis</div><div class="stags"><span class="stg">Excel</span><span class="stg">Power BI</span><span class="stg">Tableau</span><span class="stg">Pandas</span><span class="stg">NumPy</span><span class="stg">Matplotlib</span><span class="stg">Plotly</span><span class="stg">Streamlit</span></div></div>
     <div class="sc fu"><div class="sci">🧠</div><div class="sct">Data Science & ML</div><div class="stags"><span class="stg">Scikit-learn</span><span class="stg">XGBoost</span><span class="stg">Random Forest</span><span class="stg">TensorFlow</span><span class="stg">Neural Networks</span><span class="stg">Logistic Regression</span><span class="stg">SVM</span></div></div>
     <div class="sc fu"><div class="sci">🤖</div><div class="sct">Gen-AI & Agentic AI</div><div class="stags"><span class="stg">LLMs</span><span class="stg">RAG</span><span class="stg">NLP</span><span class="stg">OpenAI APIs</span><span class="stg">Prompt Engineering</span><span class="stg">AI Agents</span><span class="stg">LangChain</span></div></div>
@@ -480,21 +875,32 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
 </footer>
 
 <script>
-/* CURSOR */
+/* =========================================================
+   1. CUSTOM CURSOR & BASE PARTICLES
+========================================================= */
 const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
 let mx=-100,my=-100,cx=-100,cy=-100;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-(function loop(){cx+=(mx-cx)*.14;cy+=(my-cy)*.14;cur.style.left=cx+'px';cur.style.top=cy+'px';cur2.style.left=mx+'px';cur2.style.top=my+'px';requestAnimationFrame(loop)})();
-document.querySelectorAll('a,.btn').forEach(el=>{
+(function loopCursor(){
+  cx+=(mx-cx)*.14;cy+=(my-cy)*.14;
+  cur.style.left=cx+'px';cur.style.top=cy+'px';
+  cur2.style.left=mx+'px';cur2.style.top=my+'px';
+  requestAnimationFrame(loopCursor);
+})();
+document.querySelectorAll('a,.btn,.sm-btn').forEach(el=>{
   el.addEventListener('mouseenter',()=>cur.style.transform='translate(-50%,-50%) scale(1.9)');
   el.addEventListener('mouseleave',()=>cur.style.transform='translate(-50%,-50%) scale(1)');
 });
 
-/* PARTICLES */
+/* BG CANVAS & AMBIENT PARTICLES */
 const cv=document.getElementById('bgc'),ctx=cv.getContext('2d');
 function rsz(){cv.width=window.innerWidth;cv.height=window.innerHeight}rsz();window.addEventListener('resize',rsz);
-const pts=Array.from({length:85},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.1+.3,o:Math.random()*.38+.06}));
-(function draw(){
+const pts=Array.from({length:window.innerWidth < 768 ? 45 : 85},()=>({
+  x:Math.random()*cv.width,y:Math.random()*cv.height,
+  vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,
+  r:Math.random()*1.1+.3,o:Math.random()*.38+.06
+}));
+(function drawBg(){
   ctx.clearRect(0,0,cv.width,cv.height);
   pts.forEach(p=>{
     p.x+=p.vx;p.y+=p.vy;
@@ -507,14 +913,19 @@ const pts=Array.from({length:85},()=>({x:Math.random()*cv.width,y:Math.random()*
     const d=Math.hypot(pts[i].x-pts[j].x,pts[i].y-pts[j].y);
     if(d<105){ctx.beginPath();ctx.strokeStyle=`rgba(0,175,255,${.065*(1-d/105)})`;ctx.lineWidth=.4;ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}
   }
-  requestAnimationFrame(draw);
+  requestAnimationFrame(drawBg);
 })();
 
-/* BOOT */
+/* =========================================================
+   2. BOOT SEQUENCE
+========================================================= */
 const lines=['> JARVIS INTERFACE v7.3 INITIALIZING...','> LOADING NEURAL MODULES... [OK]','> CONNECTING DATA PIPELINES... [OK]','> ML ENGINE: ONLINE','> AI SYSTEMS: ACTIVE','> AUTHENTICATING: MITHULASHWARAN C','> PROFILE VERIFIED · AI · ML · AGENTIC SYSTEMS','> ALL SYSTEMS GO. WELCOME.'];
 const bootEl=document.getElementById('bootlines'),jname=document.getElementById('jname'),loader=document.getElementById('loader');
 setTimeout(()=>jname.classList.add('lit'),350);
-lines.forEach((t,i)=>setTimeout(()=>{const d=document.createElement('div');d.className='bl';d.textContent=t;bootEl.appendChild(d);requestAnimationFrame(()=>d.classList.add('show'))},720+i*255));
+lines.forEach((t,i)=>setTimeout(()=>{
+  const d=document.createElement('div');d.className='bl';d.textContent=t;bootEl.appendChild(d);
+  requestAnimationFrame(()=>d.classList.add('show'));
+},720+i*255));
 setTimeout(()=>{
   loader.style.transition='opacity .9s ease';loader.style.opacity='0';
   setTimeout(()=>{
@@ -523,12 +934,843 @@ setTimeout(()=>{
     document.getElementById('nav').classList.add('show');
     document.getElementById('hero').classList.add('show');
     document.querySelectorAll('.fu').forEach(el=>{if(isVis(el))el.classList.add('vis')});
+    // Trigger canvas resize after layout unhiding
+    if (typeof onHeroResize === 'function') onHeroResize();
+    if (typeof onAgentResize === 'function') onAgentResize();
+    if (typeof onSkillsResize === 'function') onSkillsResize();
   },950);
 },3100);
 
-/* SCROLL OBSERVER */
 function isVis(el){return el.getBoundingClientRect().top<window.innerHeight*.9}
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.08});
 document.querySelectorAll('.fu,.sh').forEach(el=>obs.observe(el));
-</script>
 
+/* =========================================================
+   3. INTERACTIVE 3D AI CORE — HERO SECTION (THREE.JS)
+========================================================= */
+let heroScene, heroCamera, heroRenderer, heroAICoreGroup;
+let heroRings = [], heroSatellites = [], heroParticles;
+let heroPulseIntensity = 0;
+let heroMouse = { x: 0, y: 0, targetX: 0, targetY: 0, isHovered: false };
+
+function initHeroAICore() {
+  const canvas = document.getElementById('hero-3d-canvas');
+  if (!canvas || !window.THREE) return;
+
+  const width = canvas.parentElement.clientWidth || 400;
+  const height = canvas.parentElement.clientHeight || 320;
+
+  heroScene = new THREE.Scene();
+  heroCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+  heroCamera.position.z = 9.5;
+
+  heroRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  heroRenderer.setSize(width, height);
+  heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+
+  heroAICoreGroup = new THREE.Group();
+  heroScene.add(heroAICoreGroup);
+
+  // 1. Central Glowing Core
+  const coreInnerGeo = new THREE.IcosahedronGeometry(1.2, 2);
+  const coreInnerMat = new THREE.MeshBasicMaterial({
+    color: 0x00d4ff,
+    wireframe: false,
+    transparent: true,
+    opacity: 0.85
+  });
+  const coreInner = new THREE.Mesh(coreInnerGeo, coreInnerMat);
+  heroAICoreGroup.add(coreInner);
+
+  // 2. Wireframe Energy Shell
+  const coreOuterGeo = new THREE.IcosahedronGeometry(1.65, 1);
+  const coreOuterMat = new THREE.MeshBasicMaterial({
+    color: 0x00ffff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.75
+  });
+  const coreOuter = new THREE.Mesh(coreOuterGeo, coreOuterMat);
+  heroAICoreGroup.add(coreOuter);
+
+  // 3. Holographic Geodesic Outer Cage
+  const cageGeo = new THREE.IcosahedronGeometry(2.1, 2);
+  const cageMat = new THREE.MeshBasicMaterial({
+    color: 0x0088ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.28
+  });
+  const cage = new THREE.Mesh(cageGeo, cageMat);
+  heroAICoreGroup.add(cage);
+
+  // 4. Concentric Orbital Rings
+  const ringConfigs = [
+    { radius: 2.65, tube: 0.022, rot: [0.6, 0.2, 0.4], speedX: 0.012, speedY: 0.018, color: 0x00d4ff },
+    { radius: 3.15, tube: 0.018, rot: [-0.4, 0.8, -0.2], speedX: -0.015, speedY: 0.010, color: 0x0099ee },
+    { radius: 3.65, tube: 0.015, rot: [0.8, -0.5, 0.3], speedX: 0.008, speedY: -0.020, color: 0x00ff88 }
+  ];
+
+  ringConfigs.forEach(cfg => {
+    const ringGroup = new THREE.Group();
+    ringGroup.rotation.set(...cfg.rot);
+
+    const ringGeo = new THREE.TorusGeometry(cfg.radius, cfg.tube, 16, 80);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: cfg.color,
+      transparent: true,
+      opacity: 0.75
+    });
+    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringGroup.add(ringMesh);
+
+    // Segment nodes on ring
+    const markerGeo = new THREE.BoxGeometry(0.08, 0.08, 0.08);
+    const markerMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    for (let i = 0; i < 3; i++) {
+      const angle = (i / 3) * Math.PI * 2;
+      const marker = new THREE.Mesh(markerGeo, markerMat);
+      marker.position.set(Math.cos(angle) * cfg.radius, Math.sin(angle) * cfg.radius, 0);
+      ringGroup.add(marker);
+    }
+
+    heroAICoreGroup.add(ringGroup);
+    heroRings.push({ group: ringGroup, speedX: cfg.speedX, speedY: cfg.speedY });
+  });
+
+  // 5. Orbiting Satellite Micro-Nodes
+  const satGeo = new THREE.SphereGeometry(0.12, 12, 12);
+  const satColors = [0x00ff88, 0x00d4ff, 0xf5a623, 0x0099ee];
+  for (let i = 0; i < 4; i++) {
+    const satMat = new THREE.MeshBasicMaterial({ color: satColors[i] });
+    const satMesh = new THREE.Mesh(satGeo, satMat);
+    heroAICoreGroup.add(satMesh);
+    heroSatellites.push({
+      mesh: satMesh,
+      radius: 2.3 + i * 0.45,
+      speed: 0.02 + i * 0.008,
+      angle: (i * Math.PI) / 2,
+      axis: new THREE.Vector3(Math.sin(i), Math.cos(i), Math.sin(i * 1.5)).normalize()
+    });
+  }
+
+  // 6. Particle Energy Cloud
+  const particleCount = window.innerWidth < 768 ? 120 : 220;
+  const particleGeo = new THREE.BufferGeometry();
+  const particlePositions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount * 3; i += 3) {
+    const r = 1.4 + Math.random() * 2.8;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(Math.random() * 2 - 1);
+    particlePositions[i] = r * Math.sin(phi) * Math.cos(theta);
+    particlePositions[i + 1] = r * Math.sin(phi) * Math.sin(theta);
+    particlePositions[i + 2] = r * Math.cos(phi);
+  }
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+  const particleMat = new THREE.PointsMaterial({
+    color: 0x00d4ff,
+    size: 0.07,
+    transparent: true,
+    opacity: 0.75,
+    blending: THREE.AdditiveBlending
+  });
+  heroParticles = new THREE.Points(particleGeo, particleMat);
+  heroAICoreGroup.add(heroParticles);
+
+  // Mouse & Hover interactions
+  const stage = canvas.parentElement;
+  stage.addEventListener('mousemove', e => {
+    const rect = canvas.getBoundingClientRect();
+    heroMouse.targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    heroMouse.targetY = -((e.clientY - rect.top) / rect.height - 0.5) * 2;
+  });
+  stage.addEventListener('mouseenter', () => {
+    heroMouse.isHovered = true;
+    const hud = document.getElementById('hero-hud-text');
+    if (hud) hud.textContent = 'NEURAL ACTIVITY: HIGH // AGENT PROTOCOLS ENGAGED';
+  });
+  stage.addEventListener('mouseleave', () => {
+    heroMouse.isHovered = false;
+    heroMouse.targetX = 0;
+    heroMouse.targetY = 0;
+    const hud = document.getElementById('hero-hud-text');
+    if (hud) hud.textContent = '3D AI CORE ONLINE // 100% NOMINAL';
+  });
+  stage.addEventListener('click', () => {
+    heroPulseIntensity = 1.0;
+    const hud = document.getElementById('hero-hud-text');
+    if (hud) {
+      hud.textContent = 'QUANTUM CORE PULSE // SYNCHRONIZING AGENT MESH';
+      setTimeout(() => {
+        if (hud) hud.textContent = heroMouse.isHovered ? 'NEURAL ACTIVITY: HIGH // AGENT PROTOCOLS ENGAGED' : '3D AI CORE ONLINE // 100% NOMINAL';
+      }, 1400);
+    }
+  });
+
+  window.addEventListener('resize', onHeroResize);
+}
+
+function onHeroResize() {
+  const canvas = document.getElementById('hero-3d-canvas');
+  if (!canvas || !heroRenderer || !heroCamera) return;
+  const width = canvas.parentElement.clientWidth || 400;
+  const height = canvas.parentElement.clientHeight || 320;
+  heroCamera.aspect = width / height;
+  heroCamera.updateProjectionMatrix();
+  heroRenderer.setSize(width, height);
+}
+
+let heroClock = new THREE.Clock();
+function animateHeroAICore() {
+  requestAnimationFrame(animateHeroAICore);
+  if (!heroRenderer || !heroScene || !heroCamera) return;
+
+  const elapsedTime = heroClock.getElapsedTime();
+
+  // Smooth mouse interpolation
+  heroMouse.x += (heroMouse.targetX - heroMouse.x) * 0.08;
+  heroMouse.y += (heroMouse.targetY - heroMouse.y) * 0.08;
+
+  // Pulse decay
+  if (heroPulseIntensity > 0) {
+    heroPulseIntensity = Math.max(0, heroPulseIntensity - 0.025);
+  }
+
+  const speedMultiplier = (heroMouse.isHovered ? 1.8 : 1.0) + heroPulseIntensity * 2.5;
+
+  // Rotate entire group subtly towards mouse
+  heroAICoreGroup.rotation.y = elapsedTime * 0.25 * speedMultiplier + heroMouse.x * 0.8;
+  heroAICoreGroup.rotation.x = Math.sin(elapsedTime * 0.2) * 0.15 + heroMouse.y * 0.6;
+
+  // Core pulse scale
+  const baseScale = 1 + Math.sin(elapsedTime * 3) * 0.06 + (heroMouse.isHovered ? 0.1 : 0) + heroPulseIntensity * 0.35;
+  heroAICoreGroup.children[0].scale.set(baseScale, baseScale, baseScale);
+  heroAICoreGroup.children[1].rotation.y = -elapsedTime * 0.5 * speedMultiplier;
+  heroAICoreGroup.children[1].rotation.z = elapsedTime * 0.3 * speedMultiplier;
+
+  // Rings rotation
+  heroRings.forEach(r => {
+    r.group.rotation.x += r.speedX * speedMultiplier;
+    r.group.rotation.y += r.speedY * speedMultiplier;
+  });
+
+  // Orbit satellites
+  heroSatellites.forEach(sat => {
+    sat.angle += sat.speed * speedMultiplier;
+    sat.mesh.position.x = Math.cos(sat.angle) * sat.radius;
+    sat.mesh.position.y = Math.sin(sat.angle * 1.3) * (sat.radius * 0.5);
+    sat.mesh.position.z = Math.sin(sat.angle) * sat.radius;
+  });
+
+  // Particle cloud rotation
+  if (heroParticles) {
+    heroParticles.rotation.y = -elapsedTime * 0.12 * speedMultiplier;
+  }
+
+  heroRenderer.render(heroScene, heroCamera);
+}
+
+/* =========================================================
+   4. INTERACTIVE 3D MULTI-AGENT NETWORK (LOGISTICS PROJECT)
+========================================================= */
+let agentScene, agentCamera, agentRenderer;
+let agentNodes = [], agentLines = [], agentPackets = [];
+let agentRaycaster, agentMouseVec;
+let hoveredAgent = null;
+let isAgentDragging = false, agentPrevMousePos = { x: 0, y: 0 };
+
+const AGENT_DATA = [
+  {
+    id: 'core',
+    name: 'AI CORE / LLM COORDINATOR',
+    tech: 'GROQ // LLAMA 3.3 ORCHESTRATION',
+    desc: 'Central cognitive engine analyzing real-time dispatch orders, orchestrating specialized sub-agents, and resolving multi-constraint logistics bottlenecks.',
+    pos: [0, 0, 0],
+    size: 1.25,
+    color: 0x00d4ff,
+    isCore: true
+  },
+  {
+    id: 'route',
+    name: 'ROUTE OPTIMIZATION AGENT',
+    tech: 'OSRM ROUTE API + TSP SOLVER',
+    desc: 'Calculates shortest multi-stop travel geometry, turns, live traffic impedance, and fuel-optimal routing across regional delivery corridors.',
+    pos: [0, 2.7, 0],
+    size: 0.72,
+    color: 0x00ff88
+  },
+  {
+    id: 'delay',
+    name: 'DELAY PREDICTION AGENT',
+    tech: 'RANDOM FOREST + HISTORICAL TELEMETRY',
+    desc: 'Predicts transit delays based on weather factors (Open-Meteo), time-of-day traffic, package load variance, and route density with high accuracy.',
+    pos: [2.7, 0.9, 0],
+    size: 0.72,
+    color: 0xf5a623
+  },
+  {
+    id: 'fleet',
+    name: 'FLEET HEALTH AGENT',
+    tech: 'RULE-BASED TELEMETRY ENGINE',
+    desc: 'Monitors vehicle status, engine temperature, tire pressure thresholds, and flags proactive maintenance warnings before dispatches.',
+    pos: [1.7, -2.3, 0],
+    size: 0.72,
+    color: 0x00d4ff
+  },
+  {
+    id: 'driver',
+    name: 'DRIVER ASSIGNMENT AGENT',
+    tech: 'NEAREST-NEIGHBOR WORKLOAD OPTIMIZER',
+    desc: 'Matches shipments to available fleet drivers balancing proximity, current driving hours, capacity limits, and delivery ratings.',
+    pos: [-1.7, -2.3, 0],
+    size: 0.72,
+    color: 0x00ff88
+  },
+  {
+    id: 'logistics',
+    name: 'LOGISTICS DISPATCH AGENT',
+    tech: 'FASTAPI + AUTOMATED EMAIL GATEWAY',
+    desc: 'Coordinates automated dispatch webhooks, delivery confirmation loops, driver alerts, and client notifications seamlessly.',
+    pos: [-2.7, 0.9, 0],
+    size: 0.72,
+    color: 0x0099ee
+  }
+];
+
+function initAgentNetwork() {
+  const canvas = document.getElementById('agent-network-canvas');
+  if (!canvas || !window.THREE) return;
+
+  const width = canvas.parentElement.clientWidth || 800;
+  const height = canvas.parentElement.clientHeight || 360;
+
+  agentScene = new THREE.Scene();
+  agentCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+  agentCamera.position.set(0, 0, 7.8);
+
+  agentRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  agentRenderer.setSize(width, height);
+  agentRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+
+  agentRaycaster = new THREE.Raycaster();
+  agentMouseVec = new THREE.Vector2(-1000, -1000);
+
+  const networkGroup = new THREE.Group();
+  networkGroup.name = 'networkGroup';
+  agentScene.add(networkGroup);
+
+  const coreNodeData = AGENT_DATA.find(a => a.isCore);
+  const corePos = new THREE.Vector3(...coreNodeData.pos);
+
+  // Build Nodes & Links
+  AGENT_DATA.forEach(data => {
+    const nodeGroup = new THREE.Group();
+    nodeGroup.position.set(...data.pos);
+    nodeGroup.userData = data;
+
+    // Outer wireframe cage
+    const cageGeo = new THREE.IcosahedronGeometry(data.size, data.isCore ? 2 : 1);
+    const cageMat = new THREE.MeshBasicMaterial({
+      color: data.color,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.8
+    });
+    const cageMesh = new THREE.Mesh(cageGeo, cageMat);
+    nodeGroup.add(cageMesh);
+
+    // Inner glowing sphere
+    const sphereGeo = new THREE.SphereGeometry(data.size * 0.65, 16, 16);
+    const sphereMat = new THREE.MeshBasicMaterial({
+      color: data.color,
+      transparent: true,
+      opacity: 0.6
+    });
+    const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+    nodeGroup.add(sphereMesh);
+
+    // Orbital ring around node
+    const ringGeo = new THREE.TorusGeometry(data.size * 1.25, 0.02, 8, 32);
+    const ringMat = new THREE.MeshBasicMaterial({
+      color: data.color,
+      transparent: true,
+      opacity: 0.5
+    });
+    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringMesh.rotation.x = Math.PI / 3;
+    nodeGroup.add(ringMesh);
+
+    networkGroup.add(nodeGroup);
+    agentNodes.push({ group: nodeGroup, data, cageMesh, sphereMesh, ringMesh, baseScale: 1 });
+
+    // Connect satellite to Core with glowing line
+    if (!data.isCore) {
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([corePos, new THREE.Vector3(...data.pos)]);
+      const lineMat = new THREE.LineBasicMaterial({
+        color: data.color,
+        transparent: true,
+        opacity: 0.35,
+        linewidth: 1
+      });
+      const lineMesh = new THREE.Line(lineGeo, lineMat);
+      networkGroup.add(lineMesh);
+      agentLines.push({ lineMesh, targetNode: nodeGroup, baseColor: data.color });
+
+      // Pulsing data packet traversing line
+      const packetGeo = new THREE.SphereGeometry(0.08, 8, 8);
+      const packetMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+      const packetMesh = new THREE.Mesh(packetGeo, packetMat);
+      networkGroup.add(packetMesh);
+      agentPackets.push({
+        mesh: packetMesh,
+        start: corePos.clone(),
+        end: new THREE.Vector3(...data.pos),
+        progress: Math.random(),
+        speed: 0.008 + Math.random() * 0.006
+      });
+    }
+  });
+
+  // Mouse & Touch Controls
+  canvas.addEventListener('mousemove', onAgentMouseMove);
+  canvas.addEventListener('mousedown', e => {
+    isAgentDragging = true;
+    agentPrevMousePos = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener('mouseup', () => { isAgentDragging = false; });
+  canvas.addEventListener('click', onAgentClick);
+
+  // Touch controls for mobile
+  canvas.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      isAgentDragging = true;
+      agentPrevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  }, { passive: true });
+  canvas.addEventListener('touchmove', e => {
+    if (isAgentDragging && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - agentPrevMousePos.x;
+      const dy = e.touches[0].clientY - agentPrevMousePos.y;
+      networkGroup.rotation.y += dx * 0.008;
+      networkGroup.rotation.x += dy * 0.008;
+      agentPrevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  }, { passive: true });
+  canvas.addEventListener('touchend', () => { isAgentDragging = false; });
+
+  window.addEventListener('resize', onAgentResize);
+}
+
+function onAgentMouseMove(e) {
+  const canvas = document.getElementById('agent-network-canvas');
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  agentMouseVec.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  agentMouseVec.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+  if (isAgentDragging) {
+    const dx = e.clientX - agentPrevMousePos.x;
+    const dy = e.clientY - agentPrevMousePos.y;
+    const group = agentScene.getObjectByName('networkGroup');
+    if (group) {
+      group.rotation.y += dx * 0.008;
+      group.rotation.x += dy * 0.008;
+    }
+    agentPrevMousePos = { x: e.clientX, y: e.clientY };
+  }
+}
+
+function onAgentClick() {
+  if (hoveredAgent) {
+    // Pulse clicked node
+    hoveredAgent.baseScale = 1.45;
+    updateAgentHUD(hoveredAgent.data);
+  }
+}
+
+function updateAgentHUD(data) {
+  const title = document.getElementById('ath-title');
+  const tech = document.getElementById('ath-tech');
+  const desc = document.getElementById('ath-desc');
+  if (title) title.textContent = '◈ ' + data.name;
+  if (tech) tech.textContent = data.tech;
+  if (desc) desc.textContent = data.desc;
+}
+
+function onAgentResize() {
+  const canvas = document.getElementById('agent-network-canvas');
+  if (!canvas || !agentRenderer || !agentCamera) return;
+  const width = canvas.parentElement.clientWidth || 800;
+  const height = canvas.parentElement.clientHeight || 360;
+  agentCamera.aspect = width / height;
+  agentCamera.updateProjectionMatrix();
+  agentRenderer.setSize(width, height);
+}
+
+let agentClock = new THREE.Clock();
+function animateAgentNetwork() {
+  requestAnimationFrame(animateAgentNetwork);
+  if (!agentRenderer || !agentScene || !agentCamera) return;
+
+  const elapsedTime = agentClock.getElapsedTime();
+  const group = agentScene.getObjectByName('networkGroup');
+
+  if (group && !isAgentDragging) {
+    group.rotation.y = Math.sin(elapsedTime * 0.3) * 0.18;
+    group.rotation.x = Math.cos(elapsedTime * 0.25) * 0.1;
+  }
+
+  // Raycasting for interactive hover
+  agentRaycaster.setFromCamera(agentMouseVec, agentCamera);
+  const nodeMeshes = agentNodes.map(n => n.group.children[0]); // outer cages
+  const intersects = agentRaycaster.intersectObjects(nodeMeshes, true);
+
+  if (intersects.length > 0) {
+    const hitGroup = intersects[0].object.parent;
+    const foundNode = agentNodes.find(n => n.group === hitGroup);
+    if (foundNode && hoveredAgent !== foundNode) {
+      hoveredAgent = foundNode;
+      updateAgentHUD(foundNode.data);
+      document.body.style.cursor = 'none';
+    }
+  } else {
+    hoveredAgent = null;
+  }
+
+  // Update nodes animation & scale
+  agentNodes.forEach(n => {
+    // Return scale to normal
+    if (n.baseScale > 1) n.baseScale -= 0.02;
+
+    const isHovered = hoveredAgent === n;
+    const targetScale = (isHovered ? 1.25 : 1.0) * n.baseScale;
+    n.group.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.12);
+
+    n.cageMesh.rotation.y = elapsedTime * (n.data.isCore ? 0.6 : 0.4);
+    n.cageMesh.rotation.z = elapsedTime * (n.data.isCore ? 0.4 : 0.2);
+    n.ringMesh.rotation.z = elapsedTime * 0.8;
+
+    n.sphereMesh.material.opacity = isHovered ? 0.95 : (n.data.isCore ? 0.75 : 0.45);
+    n.cageMesh.material.opacity = isHovered ? 1.0 : 0.75;
+  });
+
+  // Animate lines glow
+  agentLines.forEach(l => {
+    const isConnectedHover = hoveredAgent && (hoveredAgent.group === l.targetNode || hoveredAgent.data.isCore);
+    l.lineMesh.material.opacity = isConnectedHover ? 0.95 : 0.3;
+  });
+
+  // Animate data packets
+  agentPackets.forEach(p => {
+    p.progress += p.speed;
+    if (p.progress > 1) p.progress = 0;
+    p.mesh.position.lerpVectors(p.start, p.end, p.progress);
+  });
+
+  agentRenderer.render(agentScene, agentCamera);
+}
+
+/* =========================================================
+   5. INTERACTIVE 3D SKILLS CONSTELLATION
+========================================================= */
+let skillsScene, skillsCamera, skillsRenderer, skillsGroup;
+let skillsNodes = [], skillsLines = [];
+let skillsRaycaster, skillsMouseVec;
+let hoveredSkill = null;
+let isSkillsDragging = false, skillsPrevMousePos = { x: 0, y: 0 };
+
+const SKILL_ITEMS = [
+  { name: 'AI / ML CORE', cat: 'core', pos: [0, 0, 0], size: 1.1, color: 0x00d4ff, isCore: true },
+  { name: 'Python', cat: 'prog', pos: [-2.4, 1.4, 0.8], size: 0.6, color: 0x00ff88 },
+  { name: 'Machine Learning', cat: 'ml', pos: [2.2, 1.6, -0.6], size: 0.65, color: 0x00d4ff },
+  { name: 'Deep Learning', cat: 'ml', pos: [3.1, -0.4, 0.7], size: 0.62, color: 0x00d4ff },
+  { name: 'LLMs', cat: 'genai', pos: [-1.2, 2.6, -0.8], size: 0.65, color: 0x00ff88 },
+  { name: 'RAG Systems', cat: 'genai', pos: [0.6, 2.8, 0.9], size: 0.62, color: 0x00ff88 },
+  { name: 'AI Agents', cat: 'genai', pos: [-2.8, -0.8, -0.7], size: 0.68, color: 0x00ff88 },
+  { name: 'LangChain', cat: 'genai', pos: [-1.8, -2.4, 0.6], size: 0.58, color: 0x00ff88 },
+  { name: 'TensorFlow', cat: 'ml', pos: [2.1, -2.2, -0.8], size: 0.58, color: 0x00d4ff },
+  { name: 'PyTorch', cat: 'ml', pos: [1.1, -2.7, 0.8], size: 0.58, color: 0x00d4ff },
+  { name: 'OpenCV', cat: 'ml', pos: [3.3, 0.9, 0.9], size: 0.55, color: 0x00d4ff },
+  { name: 'SQL', cat: 'data', pos: [-3.2, 0.6, 0.5], size: 0.58, color: 0xf5a623 },
+  { name: 'Power BI', cat: 'data', pos: [-0.4, -3.1, -0.6], size: 0.58, color: 0xf5a623 },
+  { name: 'Git / GitHub', cat: 'prog', pos: [0.8, 1.8, -2.2], size: 0.55, color: 0x0099ee }
+];
+
+function initSkills3D() {
+  const canvas = document.getElementById('skills-3d-canvas');
+  if (!canvas || !window.THREE) return;
+
+  const width = canvas.parentElement.clientWidth || 800;
+  const height = canvas.parentElement.clientHeight || 440;
+
+  skillsScene = new THREE.Scene();
+  skillsCamera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+  skillsCamera.position.set(0, 0, 8.5);
+
+  skillsRenderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  skillsRenderer.setSize(width, height);
+  skillsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+
+  skillsRaycaster = new THREE.Raycaster();
+  skillsMouseVec = new THREE.Vector2(-1000, -1000);
+
+  skillsGroup = new THREE.Group();
+  skillsScene.add(skillsGroup);
+
+  const corePos = new THREE.Vector3(0, 0, 0);
+
+  // Create Skill Nodes & Constellation Lines
+  SKILL_ITEMS.forEach((skill, idx) => {
+    const nodeGroup = new THREE.Group();
+    nodeGroup.position.set(...skill.pos);
+    nodeGroup.userData = skill;
+
+    // Outer wireframe octahedron
+    const cageGeo = new THREE.OctahedronGeometry(skill.size, skill.isCore ? 2 : 0);
+    const cageMat = new THREE.MeshBasicMaterial({
+      color: skill.color,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.85
+    });
+    const cageMesh = new THREE.Mesh(cageGeo, cageMat);
+    nodeGroup.add(cageMesh);
+
+    // Inner glowing sphere
+    const sphereGeo = new THREE.SphereGeometry(skill.size * 0.55, 12, 12);
+    const sphereMat = new THREE.MeshBasicMaterial({
+      color: skill.color,
+      transparent: true,
+      opacity: 0.7
+    });
+    const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+    nodeGroup.add(sphereMesh);
+
+    skillsGroup.add(nodeGroup);
+    skillsNodes.push({ group: nodeGroup, skill, cageMesh, sphereMesh });
+
+    // Connect to core
+    if (!skill.isCore) {
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([corePos, new THREE.Vector3(...skill.pos)]);
+      const lineMat = new THREE.LineBasicMaterial({
+        color: skill.color,
+        transparent: true,
+        opacity: 0.22
+      });
+      const lineMesh = new THREE.Line(lineGeo, lineMat);
+      skillsGroup.add(lineMesh);
+      skillsLines.push({ lineMesh, targetNode: nodeGroup });
+    }
+  });
+
+  // Cross-connections between related nodes
+  const connections = [
+    [4, 5], [4, 6], [6, 7], // LLMs - RAG - Agents - LangChain
+    [2, 3], [3, 8], [3, 9], // ML - DL - TF - PyTorch
+    [1, 6], [1, 2],         // Python - Agents - ML
+    [11, 12], [2, 11]       // SQL - PowerBI - ML
+  ];
+
+  connections.forEach(([i, j]) => {
+    if (SKILL_ITEMS[i] && SKILL_ITEMS[j]) {
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(...SKILL_ITEMS[i].pos),
+        new THREE.Vector3(...SKILL_ITEMS[j].pos)
+      ]);
+      const lineMat = new THREE.LineBasicMaterial({
+        color: 0x0088cc,
+        transparent: true,
+        opacity: 0.2
+      });
+      const lineMesh = new THREE.Line(lineGeo, lineMat);
+      skillsGroup.add(lineMesh);
+    }
+  });
+
+  // Mouse & Touch events
+  canvas.addEventListener('mousemove', onSkillsMouseMove);
+  canvas.addEventListener('mousedown', e => {
+    isSkillsDragging = true;
+    skillsPrevMousePos = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener('mouseup', () => { isSkillsDragging = false; });
+
+  // Touch for mobile
+  canvas.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      isSkillsDragging = true;
+      skillsPrevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  }, { passive: true });
+  canvas.addEventListener('touchmove', e => {
+    if (isSkillsDragging && e.touches.length === 1) {
+      const dx = e.touches[0].clientX - skillsPrevMousePos.x;
+      const dy = e.touches[0].clientY - skillsPrevMousePos.y;
+      skillsGroup.rotation.y += dx * 0.008;
+      skillsGroup.rotation.x += dy * 0.008;
+      skillsPrevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  }, { passive: true });
+  canvas.addEventListener('touchend', () => { isSkillsDragging = false; });
+
+  window.addEventListener('resize', onSkillsResize);
+}
+
+function onSkillsMouseMove(e) {
+  const canvas = document.getElementById('skills-3d-canvas');
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  skillsMouseVec.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+  skillsMouseVec.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+  if (isSkillsDragging && skillsGroup) {
+    const dx = e.clientX - skillsPrevMousePos.x;
+    const dy = e.clientY - skillsPrevMousePos.y;
+    skillsGroup.rotation.y += dx * 0.008;
+    skillsGroup.rotation.x += dy * 0.008;
+    skillsPrevMousePos = { x: e.clientX, y: e.clientY };
+  }
+}
+
+function onSkillsResize() {
+  const canvas = document.getElementById('skills-3d-canvas');
+  if (!canvas || !skillsRenderer || !skillsCamera) return;
+  const width = canvas.parentElement.clientWidth || 800;
+  const height = canvas.parentElement.clientHeight || 440;
+  skillsCamera.aspect = width / height;
+  skillsCamera.updateProjectionMatrix();
+  skillsRenderer.setSize(width, height);
+}
+
+let skillsClock = new THREE.Clock();
+function animateSkills3D() {
+  requestAnimationFrame(animateSkills3D);
+  if (!skillsRenderer || !skillsScene || !skillsCamera) return;
+
+  const elapsedTime = skillsClock.getElapsedTime();
+
+  if (skillsGroup && !isSkillsDragging) {
+    skillsGroup.rotation.y = elapsedTime * 0.15;
+    skillsGroup.rotation.x = Math.sin(elapsedTime * 0.2) * 0.12;
+  }
+
+  // Raycast hover
+  skillsRaycaster.setFromCamera(skillsMouseVec, skillsCamera);
+  const nodeMeshes = skillsNodes.map(n => n.group.children[0]);
+  const intersects = skillsRaycaster.intersectObjects(nodeMeshes, true);
+
+  const tooltip = document.getElementById('skills-3d-tooltip');
+
+  if (intersects.length > 0) {
+    const hitGroup = intersects[0].object.parent;
+    const foundNode = skillsNodes.find(n => n.group === hitGroup);
+    if (foundNode) {
+      hoveredSkill = foundNode;
+      if (tooltip) {
+        tooltip.textContent = `◈ ${foundNode.skill.name}`;
+        tooltip.classList.add('show');
+      }
+    }
+  } else {
+    hoveredSkill = null;
+    if (tooltip) tooltip.classList.remove('show');
+  }
+
+  // Update nodes
+  skillsNodes.forEach(n => {
+    const isHovered = hoveredSkill === n;
+    const targetScale = isHovered ? 1.35 : 1.0;
+    n.group.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.15);
+
+    n.cageMesh.rotation.y = elapsedTime * 0.8;
+    n.cageMesh.rotation.z = elapsedTime * 0.4;
+    n.sphereMesh.material.opacity = isHovered ? 1.0 : (n.skill.isCore ? 0.8 : 0.5);
+  });
+
+  skillsRenderer.render(skillsScene, skillsCamera);
+}
+
+function setSkillsView(mode) {
+  const container3d = document.getElementById('skills-3d-wrapper');
+  const containerGrid = document.getElementById('skills-grid-wrapper');
+  const btn3d = document.getElementById('btn-skills-3d');
+  const btnGrid = document.getElementById('btn-skills-grid');
+
+  if (mode === '3d') {
+    container3d.style.display = 'block';
+    containerGrid.style.display = 'none';
+    btn3d.classList.add('active');
+    btnGrid.classList.remove('active');
+    onSkillsResize();
+  } else {
+    container3d.style.display = 'none';
+    containerGrid.style.display = 'grid';
+    btnGrid.classList.add('active');
+    btn3d.classList.remove('active');
+  }
+}
+
+/* =========================================================
+   6. 3D PROJECT CARDS (REALISTIC PERSPECTIVE TILT)
+========================================================= */
+function initProjectCardsTilt() {
+  const cards = document.querySelectorAll('.pc');
+  cards.forEach(card => {
+    let bounds;
+
+    function onMouseEnter() {
+      bounds = card.getBoundingClientRect();
+    }
+
+    function onMouseMove(e) {
+      if (!bounds) bounds = card.getBoundingClientRect();
+      const mouseX = e.clientX - bounds.left;
+      const mouseY = e.clientY - bounds.top;
+      const xPct = (mouseX / bounds.width - 0.5) * 2;
+      const yPct = (mouseY / bounds.height - 0.5) * 2;
+
+      const rotX = -yPct * 6.5; // Max 6.5 deg tilt
+      const rotY = xPct * 6.5;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
+      card.style.setProperty('--gx', `${(mouseX / bounds.width) * 100}%`);
+      card.style.setProperty('--gy', `${(mouseY / bounds.height) * 100}%`);
+    }
+
+    function onMouseLeave() {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+    }
+
+    card.addEventListener('mouseenter', onMouseEnter);
+    card.addEventListener('mousemove', onMouseMove);
+    card.addEventListener('mouseleave', onMouseLeave);
+  });
+}
+
+/* =========================================================
+   7. SCROLL TRANSITIONS & INITIALIZATION
+========================================================= */
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  // Subtle parallax background shift
+  if (heroCamera) {
+    heroCamera.position.y = (scrollY * 0.002);
+  }
+}, { passive: true });
+
+// Initialize everything on window load
+window.addEventListener('load', () => {
+  initHeroAICore();
+  animateHeroAICore();
+
+  initAgentNetwork();
+  animateAgentNetwork();
+
+  initSkills3D();
+  animateSkills3D();
+
+  initProjectCardsTilt();
+});
+</script>
+</body>
+</html>
