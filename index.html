@@ -124,8 +124,8 @@ nav.show{opacity:1;transform:translateY(0)}
   align-items:center;
   gap:12px;
   background:rgba(0,16,38,.85);
-  border:1px solid rgba(0,212,255,.25);
-  padding:5px 14px;
+  border:1px solid rgba(0,212,255,.3);
+  padding:5px 16px;
   border-radius:3px;
   font-family:'Share Tech Mono',monospace;
   font-size:9px;
@@ -135,6 +135,7 @@ nav.show{opacity:1;transform:translateY(0)}
   z-index:3;
   backdrop-filter:blur(6px);
   white-space:nowrap;
+  box-shadow:0 0 15px rgba(0,212,255,.2);
 }
 .hero-3d-hud-dot{
   width:6px;height:6px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn);animation:blink 1.5s infinite;
@@ -587,7 +588,7 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
     <canvas id="hero-3d-canvas"></canvas>
     <div class="hero-3d-hud" id="hero-core-hud">
       <span class="hero-3d-hud-dot"></span>
-      <span id="hero-hud-text">3D AI CORE ONLINE // 100% NOMINAL</span>
+      <span id="hero-hud-text">3D AI CORE ONLINE // MODE: QUANTUM CORE [TAP TO MORPH]</span>
     </div>
   </div>
 
@@ -743,7 +744,7 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
               <div class="ath-desc" id="ath-desc">Central cognitive engine analyzing dispatch parameters, orchestrating multi-agent decision loops, and formulating autonomous routing policies.</div>
             </div>
             <div class="agent-hud-instruction">
-              <span>✛ HOVER / CLICK NODES TO INSPECT AGENT MISSION & TELEMETRY • DRAG TO ROTATE 3D GRAPH</span>
+              <span>✛ TAP NODES TO TRIGGER SURGE DISPATCH PULSE • DRAG WITH INERTIA TO ROTATE</span>
             </div>
           </div>
         </div>
@@ -791,7 +792,7 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
   <!-- 3D INTERACTIVE SKILL CONSTELLATION -->
   <div class="skills-3d-container fu" id="skills-3d-wrapper">
     <canvas id="skills-3d-canvas"></canvas>
-    <div class="skills-3d-hud">INTERACTIVE SKILL CONSTELLATION • DRAG TO REVOLVE • HOVER TO ILLUMINATE</div>
+    <div class="skills-3d-hud">INTERACTIVE SKILL CONSTELLATION • DRAG TO ROTATE • TAP SKILL TO ILLUMINATE CLUSTER</div>
     <div class="skills-3d-tooltip" id="skills-3d-tooltip">AI / ML CORE</div>
   </div>
 
@@ -934,7 +935,6 @@ setTimeout(()=>{
     document.getElementById('nav').classList.add('show');
     document.getElementById('hero').classList.add('show');
     document.querySelectorAll('.fu').forEach(el=>{if(isVis(el))el.classList.add('vis')});
-    // Trigger canvas resize after layout unhiding
     if (typeof onHeroResize === 'function') onHeroResize();
     if (typeof onAgentResize === 'function') onAgentResize();
     if (typeof onSkillsResize === 'function') onSkillsResize();
@@ -946,11 +946,18 @@ const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.targ
 document.querySelectorAll('.fu,.sh').forEach(el=>obs.observe(el));
 
 /* =========================================================
-   3. INTERACTIVE 3D AI CORE — HERO SECTION (THREE.JS)
+   3. INTERACTIVE 3D AI CORE — HERO SECTION (THREE.JS ENHANCED)
 ========================================================= */
 let heroScene, heroCamera, heroRenderer, heroAICoreGroup;
+let heroCoreInner, heroCoreOuter, heroCage, heroTorusKnot, heroOctaCluster;
 let heroRings = [], heroSatellites = [], heroParticles;
 let heroPulseIntensity = 0;
+let heroAnimMode = 0; // 0: QUANTUM CORE, 1: HYPER MATRIX, 2: NEURAL VORTEX
+const HERO_MODES = [
+  'QUANTUM CORE // DUAL ICOSAHEDRON ORBIT',
+  'HYPER MATRIX // TORUS KNOT HYPER-CUBE',
+  'NEURAL VORTEX // OCTAHEDRON HELIX SPIRAL'
+];
 let heroMouse = { x: 0, y: 0, targetX: 0, targetY: 0, isHovered: false };
 
 function initHeroAICore() {
@@ -971,40 +978,35 @@ function initHeroAICore() {
   heroAICoreGroup = new THREE.Group();
   heroScene.add(heroAICoreGroup);
 
-  // 1. Central Glowing Core
+  // Mode 0 Meshes (Classic Icosahedron)
   const coreInnerGeo = new THREE.IcosahedronGeometry(1.2, 2);
-  const coreInnerMat = new THREE.MeshBasicMaterial({
-    color: 0x00d4ff,
-    wireframe: false,
-    transparent: true,
-    opacity: 0.85
-  });
-  const coreInner = new THREE.Mesh(coreInnerGeo, coreInnerMat);
-  heroAICoreGroup.add(coreInner);
+  const coreInnerMat = new THREE.MeshBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.85 });
+  heroCoreInner = new THREE.Mesh(coreInnerGeo, coreInnerMat);
+  heroAICoreGroup.add(heroCoreInner);
 
-  // 2. Wireframe Energy Shell
   const coreOuterGeo = new THREE.IcosahedronGeometry(1.65, 1);
-  const coreOuterMat = new THREE.MeshBasicMaterial({
-    color: 0x00ffff,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.75
-  });
-  const coreOuter = new THREE.Mesh(coreOuterGeo, coreOuterMat);
-  heroAICoreGroup.add(coreOuter);
+  const coreOuterMat = new THREE.MeshBasicMaterial({ color: 0x00ffff, wireframe: true, transparent: true, opacity: 0.75 });
+  heroCoreOuter = new THREE.Mesh(coreOuterGeo, coreOuterMat);
+  heroAICoreGroup.add(heroCoreOuter);
 
-  // 3. Holographic Geodesic Outer Cage
   const cageGeo = new THREE.IcosahedronGeometry(2.1, 2);
-  const cageMat = new THREE.MeshBasicMaterial({
-    color: 0x0088ff,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.28
-  });
-  const cage = new THREE.Mesh(cageGeo, cageMat);
-  heroAICoreGroup.add(cage);
+  const cageMat = new THREE.MeshBasicMaterial({ color: 0x0088ff, wireframe: true, transparent: true, opacity: 0.28 });
+  heroCage = new THREE.Mesh(cageGeo, cageMat);
+  heroAICoreGroup.add(heroCage);
 
-  // 4. Concentric Orbital Rings
+  // Mode 1 Mesh: Torus Knot Hyper Core
+  const knotGeo = new THREE.TorusKnotGeometry(0.85, 0.28, 64, 16);
+  const knotMat = new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true, transparent: true, opacity: 0 });
+  heroTorusKnot = new THREE.Mesh(knotGeo, knotMat);
+  heroAICoreGroup.add(heroTorusKnot);
+
+  // Mode 2 Mesh: Octahedron Cluster Core
+  const octaGeo = new THREE.OctahedronGeometry(1.35, 1);
+  const octaMat = new THREE.MeshBasicMaterial({ color: 0xf5a623, wireframe: true, transparent: true, opacity: 0 });
+  heroOctaCluster = new THREE.Mesh(octaGeo, octaMat);
+  heroAICoreGroup.add(heroOctaCluster);
+
+  // Concentric Orbital Rings
   const ringConfigs = [
     { radius: 2.65, tube: 0.022, rot: [0.6, 0.2, 0.4], speedX: 0.012, speedY: 0.018, color: 0x00d4ff },
     { radius: 3.15, tube: 0.018, rot: [-0.4, 0.8, -0.2], speedX: -0.015, speedY: 0.010, color: 0x0099ee },
@@ -1016,15 +1018,10 @@ function initHeroAICore() {
     ringGroup.rotation.set(...cfg.rot);
 
     const ringGeo = new THREE.TorusGeometry(cfg.radius, cfg.tube, 16, 80);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: cfg.color,
-      transparent: true,
-      opacity: 0.75
-    });
+    const ringMat = new THREE.MeshBasicMaterial({ color: cfg.color, transparent: true, opacity: 0.75 });
     const ringMesh = new THREE.Mesh(ringGeo, ringMat);
     ringGroup.add(ringMesh);
 
-    // Segment nodes on ring
     const markerGeo = new THREE.BoxGeometry(0.08, 0.08, 0.08);
     const markerMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
     for (let i = 0; i < 3; i++) {
@@ -1038,7 +1035,7 @@ function initHeroAICore() {
     heroRings.push({ group: ringGroup, speedX: cfg.speedX, speedY: cfg.speedY });
   });
 
-  // 5. Orbiting Satellite Micro-Nodes
+  // Satellite Micro-Nodes
   const satGeo = new THREE.SphereGeometry(0.12, 12, 12);
   const satColors = [0x00ff88, 0x00d4ff, 0xf5a623, 0x0099ee];
   for (let i = 0; i < 4; i++) {
@@ -1049,12 +1046,11 @@ function initHeroAICore() {
       mesh: satMesh,
       radius: 2.3 + i * 0.45,
       speed: 0.02 + i * 0.008,
-      angle: (i * Math.PI) / 2,
-      axis: new THREE.Vector3(Math.sin(i), Math.cos(i), Math.sin(i * 1.5)).normalize()
+      angle: (i * Math.PI) / 2
     });
   }
 
-  // 6. Particle Energy Cloud
+  // Particle Cloud
   const particleCount = window.innerWidth < 768 ? 120 : 220;
   const particleGeo = new THREE.BufferGeometry();
   const particlePositions = new Float32Array(particleCount * 3);
@@ -1077,35 +1073,37 @@ function initHeroAICore() {
   heroParticles = new THREE.Points(particleGeo, particleMat);
   heroAICoreGroup.add(heroParticles);
 
-  // Mouse & Hover interactions
+  // Mouse & Touch Interaction with MODE TRANSFORMATIONS
   const stage = canvas.parentElement;
   stage.addEventListener('mousemove', e => {
     const rect = canvas.getBoundingClientRect();
     heroMouse.targetX = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
     heroMouse.targetY = -((e.clientY - rect.top) / rect.height - 0.5) * 2;
   });
-  stage.addEventListener('mouseenter', () => {
-    heroMouse.isHovered = true;
-    const hud = document.getElementById('hero-hud-text');
-    if (hud) hud.textContent = 'NEURAL ACTIVITY: HIGH // AGENT PROTOCOLS ENGAGED';
-  });
+  stage.addEventListener('mouseenter', () => { heroMouse.isHovered = true; });
   stage.addEventListener('mouseleave', () => {
     heroMouse.isHovered = false;
-    heroMouse.targetX = 0;
-    heroMouse.targetY = 0;
-    const hud = document.getElementById('hero-hud-text');
-    if (hud) hud.textContent = '3D AI CORE ONLINE // 100% NOMINAL';
+    heroMouse.targetX = 0; heroMouse.targetY = 0;
   });
-  stage.addEventListener('click', () => {
+
+  // Click / Touch Trigger Shape & Style Morph!
+  function triggerHeroMorph() {
     heroPulseIntensity = 1.0;
+    heroAnimMode = (heroAnimMode + 1) % 3;
     const hud = document.getElementById('hero-hud-text');
     if (hud) {
-      hud.textContent = 'QUANTUM CORE PULSE // SYNCHRONIZING AGENT MESH';
-      setTimeout(() => {
-        if (hud) hud.textContent = heroMouse.isHovered ? 'NEURAL ACTIVITY: HIGH // AGENT PROTOCOLS ENGAGED' : '3D AI CORE ONLINE // 100% NOMINAL';
-      }, 1400);
+      hud.textContent = `MODE ${heroAnimMode + 1}: ${HERO_MODES[heroAnimMode]} [TAP TO MORPH]`;
     }
-  });
+  }
+
+  stage.addEventListener('click', triggerHeroMorph);
+  stage.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      const rect = canvas.getBoundingClientRect();
+      heroMouse.targetX = ((e.touches[0].clientX - rect.left) / rect.width - 0.5) * 2;
+      heroMouse.targetY = -((e.touches[0].clientY - rect.top) / rect.height - 0.5) * 2;
+    }
+  }, { passive: true });
 
   window.addEventListener('resize', onHeroResize);
 }
@@ -1127,26 +1125,35 @@ function animateHeroAICore() {
 
   const elapsedTime = heroClock.getElapsedTime();
 
-  // Smooth mouse interpolation
   heroMouse.x += (heroMouse.targetX - heroMouse.x) * 0.08;
   heroMouse.y += (heroMouse.targetY - heroMouse.y) * 0.08;
 
-  // Pulse decay
   if (heroPulseIntensity > 0) {
     heroPulseIntensity = Math.max(0, heroPulseIntensity - 0.025);
   }
 
   const speedMultiplier = (heroMouse.isHovered ? 1.8 : 1.0) + heroPulseIntensity * 2.5;
 
-  // Rotate entire group subtly towards mouse
+  // Smooth Mode Opacity Transitions
+  heroCoreInner.material.opacity = THREE.MathUtils.lerp(heroCoreInner.material.opacity, heroAnimMode === 0 ? 0.85 : 0, 0.1);
+  heroCoreOuter.material.opacity = THREE.MathUtils.lerp(heroCoreOuter.material.opacity, heroAnimMode === 0 ? 0.75 : 0, 0.1);
+  heroCage.material.opacity = THREE.MathUtils.lerp(heroCage.material.opacity, heroAnimMode === 0 ? 0.28 : 0.08, 0.1);
+
+  heroTorusKnot.material.opacity = THREE.MathUtils.lerp(heroTorusKnot.material.opacity, heroAnimMode === 1 ? 0.85 : 0, 0.1);
+  heroOctaCluster.material.opacity = THREE.MathUtils.lerp(heroOctaCluster.material.opacity, heroAnimMode === 2 ? 0.85 : 0, 0.1);
+
+  // Group rotation
   heroAICoreGroup.rotation.y = elapsedTime * 0.25 * speedMultiplier + heroMouse.x * 0.8;
   heroAICoreGroup.rotation.x = Math.sin(elapsedTime * 0.2) * 0.15 + heroMouse.y * 0.6;
 
   // Core pulse scale
   const baseScale = 1 + Math.sin(elapsedTime * 3) * 0.06 + (heroMouse.isHovered ? 0.1 : 0) + heroPulseIntensity * 0.35;
-  heroAICoreGroup.children[0].scale.set(baseScale, baseScale, baseScale);
-  heroAICoreGroup.children[1].rotation.y = -elapsedTime * 0.5 * speedMultiplier;
-  heroAICoreGroup.children[1].rotation.z = elapsedTime * 0.3 * speedMultiplier;
+  heroCoreInner.scale.set(baseScale, baseScale, baseScale);
+  heroTorusKnot.scale.set(baseScale, baseScale, baseScale);
+  heroOctaCluster.scale.set(baseScale, baseScale, baseScale);
+
+  heroTorusKnot.rotation.x = elapsedTime * 0.8 * speedMultiplier;
+  heroOctaCluster.rotation.z = elapsedTime * 0.6 * speedMultiplier;
 
   // Rings rotation
   heroRings.forEach(r => {
@@ -1171,70 +1178,22 @@ function animateHeroAICore() {
 }
 
 /* =========================================================
-   4. INTERACTIVE 3D MULTI-AGENT NETWORK (LOGISTICS PROJECT)
+   4. INTERACTIVE 3D MULTI-AGENT NETWORK (WITH INERTIA & SURGE)
 ========================================================= */
 let agentScene, agentCamera, agentRenderer;
 let agentNodes = [], agentLines = [], agentPackets = [];
 let agentRaycaster, agentMouseVec;
 let hoveredAgent = null;
 let isAgentDragging = false, agentPrevMousePos = { x: 0, y: 0 };
+let agentVelX = 0, agentVelY = 0; // Rotational velocity for physics inertia
 
 const AGENT_DATA = [
-  {
-    id: 'core',
-    name: 'AI CORE / LLM COORDINATOR',
-    tech: 'GROQ // LLAMA 3.3 ORCHESTRATION',
-    desc: 'Central cognitive engine analyzing real-time dispatch orders, orchestrating specialized sub-agents, and resolving multi-constraint logistics bottlenecks.',
-    pos: [0, 0, 0],
-    size: 1.25,
-    color: 0x00d4ff,
-    isCore: true
-  },
-  {
-    id: 'route',
-    name: 'ROUTE OPTIMIZATION AGENT',
-    tech: 'OSRM ROUTE API + TSP SOLVER',
-    desc: 'Calculates shortest multi-stop travel geometry, turns, live traffic impedance, and fuel-optimal routing across regional delivery corridors.',
-    pos: [0, 2.7, 0],
-    size: 0.72,
-    color: 0x00ff88
-  },
-  {
-    id: 'delay',
-    name: 'DELAY PREDICTION AGENT',
-    tech: 'RANDOM FOREST + HISTORICAL TELEMETRY',
-    desc: 'Predicts transit delays based on weather factors (Open-Meteo), time-of-day traffic, package load variance, and route density with high accuracy.',
-    pos: [2.7, 0.9, 0],
-    size: 0.72,
-    color: 0xf5a623
-  },
-  {
-    id: 'fleet',
-    name: 'FLEET HEALTH AGENT',
-    tech: 'RULE-BASED TELEMETRY ENGINE',
-    desc: 'Monitors vehicle status, engine temperature, tire pressure thresholds, and flags proactive maintenance warnings before dispatches.',
-    pos: [1.7, -2.3, 0],
-    size: 0.72,
-    color: 0x00d4ff
-  },
-  {
-    id: 'driver',
-    name: 'DRIVER ASSIGNMENT AGENT',
-    tech: 'NEAREST-NEIGHBOR WORKLOAD OPTIMIZER',
-    desc: 'Matches shipments to available fleet drivers balancing proximity, current driving hours, capacity limits, and delivery ratings.',
-    pos: [-1.7, -2.3, 0],
-    size: 0.72,
-    color: 0x00ff88
-  },
-  {
-    id: 'logistics',
-    name: 'LOGISTICS DISPATCH AGENT',
-    tech: 'FASTAPI + AUTOMATED EMAIL GATEWAY',
-    desc: 'Coordinates automated dispatch webhooks, delivery confirmation loops, driver alerts, and client notifications seamlessly.',
-    pos: [-2.7, 0.9, 0],
-    size: 0.72,
-    color: 0x0099ee
-  }
+  { id: 'core', name: 'AI CORE / LLM COORDINATOR', tech: 'GROQ // LLAMA 3.3 ORCHESTRATION', desc: 'Central cognitive engine analyzing real-time dispatch orders, orchestrating specialized sub-agents, and resolving multi-constraint logistics bottlenecks.', pos: [0, 0, 0], size: 1.25, color: 0x00d4ff, isCore: true },
+  { id: 'route', name: 'ROUTE OPTIMIZATION AGENT', tech: 'OSRM ROUTE API + TSP SOLVER', desc: 'Calculates shortest multi-stop travel geometry, turns, live traffic impedance, and fuel-optimal routing across regional delivery corridors.', pos: [0, 2.7, 0], size: 0.72, color: 0x00ff88 },
+  { id: 'delay', name: 'DELAY PREDICTION AGENT', tech: 'RANDOM FOREST + HISTORICAL TELEMETRY', desc: 'Predicts transit delays based on weather factors (Open-Meteo), time-of-day traffic, package load variance, and route density with high accuracy.', pos: [2.7, 0.9, 0], size: 0.72, color: 0xf5a623 },
+  { id: 'fleet', name: 'FLEET HEALTH AGENT', tech: 'RULE-BASED TELEMETRY ENGINE', desc: 'Monitors vehicle status, engine temperature, tire pressure thresholds, and flags proactive maintenance warnings before dispatches.', pos: [1.7, -2.3, 0], size: 0.72, color: 0x00d4ff },
+  { id: 'driver', name: 'DRIVER ASSIGNMENT AGENT', tech: 'NEAREST-NEIGHBOR WORKLOAD OPTIMIZER', desc: 'Matches shipments to available fleet drivers balancing proximity, current driving hours, capacity limits, and delivery ratings.', pos: [-1.7, -2.3, 0], size: 0.72, color: 0x00ff88 },
+  { id: 'logistics', name: 'LOGISTICS DISPATCH AGENT', tech: 'FASTAPI + AUTOMATED EMAIL GATEWAY', desc: 'Coordinates automated dispatch webhooks, delivery confirmation loops, driver alerts, and client notifications seamlessly.', pos: [-2.7, 0.9, 0], size: 0.72, color: 0x0099ee }
 ];
 
 function initAgentNetwork() {
@@ -1262,40 +1221,23 @@ function initAgentNetwork() {
   const coreNodeData = AGENT_DATA.find(a => a.isCore);
   const corePos = new THREE.Vector3(...coreNodeData.pos);
 
-  // Build Nodes & Links
   AGENT_DATA.forEach(data => {
     const nodeGroup = new THREE.Group();
     nodeGroup.position.set(...data.pos);
     nodeGroup.userData = data;
 
-    // Outer wireframe cage
     const cageGeo = new THREE.IcosahedronGeometry(data.size, data.isCore ? 2 : 1);
-    const cageMat = new THREE.MeshBasicMaterial({
-      color: data.color,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.8
-    });
+    const cageMat = new THREE.MeshBasicMaterial({ color: data.color, wireframe: true, transparent: true, opacity: 0.8 });
     const cageMesh = new THREE.Mesh(cageGeo, cageMat);
     nodeGroup.add(cageMesh);
 
-    // Inner glowing sphere
     const sphereGeo = new THREE.SphereGeometry(data.size * 0.65, 16, 16);
-    const sphereMat = new THREE.MeshBasicMaterial({
-      color: data.color,
-      transparent: true,
-      opacity: 0.6
-    });
+    const sphereMat = new THREE.MeshBasicMaterial({ color: data.color, transparent: true, opacity: 0.6 });
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     nodeGroup.add(sphereMesh);
 
-    // Orbital ring around node
     const ringGeo = new THREE.TorusGeometry(data.size * 1.25, 0.02, 8, 32);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: data.color,
-      transparent: true,
-      opacity: 0.5
-    });
+    const ringMat = new THREE.MeshBasicMaterial({ color: data.color, transparent: true, opacity: 0.5 });
     const ringMesh = new THREE.Mesh(ringGeo, ringMat);
     ringMesh.rotation.x = Math.PI / 3;
     nodeGroup.add(ringMesh);
@@ -1303,21 +1245,14 @@ function initAgentNetwork() {
     networkGroup.add(nodeGroup);
     agentNodes.push({ group: nodeGroup, data, cageMesh, sphereMesh, ringMesh, baseScale: 1 });
 
-    // Connect satellite to Core with glowing line
     if (!data.isCore) {
       const lineGeo = new THREE.BufferGeometry().setFromPoints([corePos, new THREE.Vector3(...data.pos)]);
-      const lineMat = new THREE.LineBasicMaterial({
-        color: data.color,
-        transparent: true,
-        opacity: 0.35,
-        linewidth: 1
-      });
+      const lineMat = new THREE.LineBasicMaterial({ color: data.color, transparent: true, opacity: 0.35 });
       const lineMesh = new THREE.Line(lineGeo, lineMat);
       networkGroup.add(lineMesh);
       agentLines.push({ lineMesh, targetNode: nodeGroup, baseColor: data.color });
 
-      // Pulsing data packet traversing line
-      const packetGeo = new THREE.SphereGeometry(0.08, 8, 8);
+      const packetGeo = new THREE.SphereGeometry(0.09, 8, 8);
       const packetMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
       const packetMesh = new THREE.Mesh(packetGeo, packetMat);
       networkGroup.add(packetMesh);
@@ -1331,16 +1266,16 @@ function initAgentNetwork() {
     }
   });
 
-  // Mouse & Touch Controls
+  // Mouse & Touch Controls with Inertia
   canvas.addEventListener('mousemove', onAgentMouseMove);
   canvas.addEventListener('mousedown', e => {
     isAgentDragging = true;
     agentPrevMousePos = { x: e.clientX, y: e.clientY };
   });
   window.addEventListener('mouseup', () => { isAgentDragging = false; });
-  canvas.addEventListener('click', onAgentClick);
+  canvas.addEventListener('click', triggerAgentSurge);
 
-  // Touch controls for mobile
+  // Touch for Mobile
   canvas.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       isAgentDragging = true;
@@ -1351,8 +1286,8 @@ function initAgentNetwork() {
     if (isAgentDragging && e.touches.length === 1) {
       const dx = e.touches[0].clientX - agentPrevMousePos.x;
       const dy = e.touches[0].clientY - agentPrevMousePos.y;
-      networkGroup.rotation.y += dx * 0.008;
-      networkGroup.rotation.x += dy * 0.008;
+      agentVelY = dx * 0.006;
+      agentVelX = dy * 0.006;
       agentPrevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     }
   }, { passive: true });
@@ -1371,21 +1306,22 @@ function onAgentMouseMove(e) {
   if (isAgentDragging) {
     const dx = e.clientX - agentPrevMousePos.x;
     const dy = e.clientY - agentPrevMousePos.y;
-    const group = agentScene.getObjectByName('networkGroup');
-    if (group) {
-      group.rotation.y += dx * 0.008;
-      group.rotation.x += dy * 0.008;
-    }
+    agentVelY = dx * 0.006;
+    agentVelX = dy * 0.006;
     agentPrevMousePos = { x: e.clientX, y: e.clientY };
   }
 }
 
-function onAgentClick() {
+function triggerAgentSurge() {
   if (hoveredAgent) {
-    // Pulse clicked node
-    hoveredAgent.baseScale = 1.45;
+    hoveredAgent.baseScale = 1.55;
     updateAgentHUD(hoveredAgent.data);
   }
+  // Energy packet surge across all lines
+  agentPackets.forEach(p => { p.speed = 0.035; });
+  setTimeout(() => {
+    agentPackets.forEach(p => { p.speed = 0.008 + Math.random() * 0.006; });
+  }, 1200);
 }
 
 function updateAgentHUD(data) {
@@ -1415,14 +1351,21 @@ function animateAgentNetwork() {
   const elapsedTime = agentClock.getElapsedTime();
   const group = agentScene.getObjectByName('networkGroup');
 
-  if (group && !isAgentDragging) {
-    group.rotation.y = Math.sin(elapsedTime * 0.3) * 0.18;
-    group.rotation.x = Math.cos(elapsedTime * 0.25) * 0.1;
+  if (group) {
+    // Apply rotational inertia physics
+    group.rotation.y += agentVelY;
+    group.rotation.x += agentVelX;
+    agentVelY *= 0.93; // Friction decay
+    agentVelX *= 0.93;
+
+    if (!isAgentDragging && Math.abs(agentVelY) < 0.001) {
+      group.rotation.y += Math.sin(elapsedTime * 0.3) * 0.002;
+    }
   }
 
-  // Raycasting for interactive hover
+  // Raycast hover
   agentRaycaster.setFromCamera(agentMouseVec, agentCamera);
-  const nodeMeshes = agentNodes.map(n => n.group.children[0]); // outer cages
+  const nodeMeshes = agentNodes.map(n => n.group.children[0]);
   const intersects = agentRaycaster.intersectObjects(nodeMeshes, true);
 
   if (intersects.length > 0) {
@@ -1431,36 +1374,32 @@ function animateAgentNetwork() {
     if (foundNode && hoveredAgent !== foundNode) {
       hoveredAgent = foundNode;
       updateAgentHUD(foundNode.data);
-      document.body.style.cursor = 'none';
     }
   } else {
     hoveredAgent = null;
   }
 
-  // Update nodes animation & scale
+  // Nodes animation
   agentNodes.forEach(n => {
-    // Return scale to normal
     if (n.baseScale > 1) n.baseScale -= 0.02;
 
     const isHovered = hoveredAgent === n;
-    const targetScale = (isHovered ? 1.25 : 1.0) * n.baseScale;
-    n.group.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.12);
+    const targetScale = (isHovered ? 1.28 : 1.0) * n.baseScale;
+    n.group.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.14);
 
     n.cageMesh.rotation.y = elapsedTime * (n.data.isCore ? 0.6 : 0.4);
-    n.cageMesh.rotation.z = elapsedTime * (n.data.isCore ? 0.4 : 0.2);
     n.ringMesh.rotation.z = elapsedTime * 0.8;
 
     n.sphereMesh.material.opacity = isHovered ? 0.95 : (n.data.isCore ? 0.75 : 0.45);
-    n.cageMesh.material.opacity = isHovered ? 1.0 : 0.75;
   });
 
-  // Animate lines glow
+  // Lines glow
   agentLines.forEach(l => {
     const isConnectedHover = hoveredAgent && (hoveredAgent.group === l.targetNode || hoveredAgent.data.isCore);
-    l.lineMesh.material.opacity = isConnectedHover ? 0.95 : 0.3;
+    l.lineMesh.material.opacity = isConnectedHover ? 0.95 : 0.35;
   });
 
-  // Animate data packets
+  // Data packets
   agentPackets.forEach(p => {
     p.progress += p.speed;
     if (p.progress > 1) p.progress = 0;
@@ -1471,13 +1410,14 @@ function animateAgentNetwork() {
 }
 
 /* =========================================================
-   5. INTERACTIVE 3D SKILLS CONSTELLATION
+   5. INTERACTIVE 3D SKILLS CONSTELLATION (WITH CLUSTER ILLUMINATION)
 ========================================================= */
 let skillsScene, skillsCamera, skillsRenderer, skillsGroup;
 let skillsNodes = [], skillsLines = [];
 let skillsRaycaster, skillsMouseVec;
 let hoveredSkill = null;
 let isSkillsDragging = false, skillsPrevMousePos = { x: 0, y: 0 };
+let skillsVelX = 0, skillsVelY = 0;
 
 const SKILL_ITEMS = [
   { name: 'AI / ML CORE', cat: 'core', pos: [0, 0, 0], size: 1.1, color: 0x00d4ff, isCore: true },
@@ -1519,56 +1459,38 @@ function initSkills3D() {
 
   const corePos = new THREE.Vector3(0, 0, 0);
 
-  // Create Skill Nodes & Constellation Lines
   SKILL_ITEMS.forEach((skill, idx) => {
     const nodeGroup = new THREE.Group();
     nodeGroup.position.set(...skill.pos);
     nodeGroup.userData = skill;
 
-    // Outer wireframe octahedron
     const cageGeo = new THREE.OctahedronGeometry(skill.size, skill.isCore ? 2 : 0);
-    const cageMat = new THREE.MeshBasicMaterial({
-      color: skill.color,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.85
-    });
+    const cageMat = new THREE.MeshBasicMaterial({ color: skill.color, wireframe: true, transparent: true, opacity: 0.85 });
     const cageMesh = new THREE.Mesh(cageGeo, cageMat);
     nodeGroup.add(cageMesh);
 
-    // Inner glowing sphere
     const sphereGeo = new THREE.SphereGeometry(skill.size * 0.55, 12, 12);
-    const sphereMat = new THREE.MeshBasicMaterial({
-      color: skill.color,
-      transparent: true,
-      opacity: 0.7
-    });
+    const sphereMat = new THREE.MeshBasicMaterial({ color: skill.color, transparent: true, opacity: 0.7 });
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     nodeGroup.add(sphereMesh);
 
     skillsGroup.add(nodeGroup);
     skillsNodes.push({ group: nodeGroup, skill, cageMesh, sphereMesh });
 
-    // Connect to core
     if (!skill.isCore) {
       const lineGeo = new THREE.BufferGeometry().setFromPoints([corePos, new THREE.Vector3(...skill.pos)]);
-      const lineMat = new THREE.LineBasicMaterial({
-        color: skill.color,
-        transparent: true,
-        opacity: 0.22
-      });
+      const lineMat = new THREE.LineBasicMaterial({ color: skill.color, transparent: true, opacity: 0.22 });
       const lineMesh = new THREE.Line(lineGeo, lineMat);
       skillsGroup.add(lineMesh);
       skillsLines.push({ lineMesh, targetNode: nodeGroup });
     }
   });
 
-  // Cross-connections between related nodes
   const connections = [
-    [4, 5], [4, 6], [6, 7], // LLMs - RAG - Agents - LangChain
-    [2, 3], [3, 8], [3, 9], // ML - DL - TF - PyTorch
-    [1, 6], [1, 2],         // Python - Agents - ML
-    [11, 12], [2, 11]       // SQL - PowerBI - ML
+    [4, 5], [4, 6], [6, 7],
+    [2, 3], [3, 8], [3, 9],
+    [1, 6], [1, 2],
+    [11, 12], [2, 11]
   ];
 
   connections.forEach(([i, j]) => {
@@ -1577,17 +1499,12 @@ function initSkills3D() {
         new THREE.Vector3(...SKILL_ITEMS[i].pos),
         new THREE.Vector3(...SKILL_ITEMS[j].pos)
       ]);
-      const lineMat = new THREE.LineBasicMaterial({
-        color: 0x0088cc,
-        transparent: true,
-        opacity: 0.2
-      });
+      const lineMat = new THREE.LineBasicMaterial({ color: 0x0088cc, transparent: true, opacity: 0.2 });
       const lineMesh = new THREE.Line(lineGeo, lineMat);
       skillsGroup.add(lineMesh);
     }
   });
 
-  // Mouse & Touch events
   canvas.addEventListener('mousemove', onSkillsMouseMove);
   canvas.addEventListener('mousedown', e => {
     isSkillsDragging = true;
@@ -1595,7 +1512,6 @@ function initSkills3D() {
   });
   window.addEventListener('mouseup', () => { isSkillsDragging = false; });
 
-  // Touch for mobile
   canvas.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       isSkillsDragging = true;
@@ -1606,8 +1522,8 @@ function initSkills3D() {
     if (isSkillsDragging && e.touches.length === 1) {
       const dx = e.touches[0].clientX - skillsPrevMousePos.x;
       const dy = e.touches[0].clientY - skillsPrevMousePos.y;
-      skillsGroup.rotation.y += dx * 0.008;
-      skillsGroup.rotation.x += dy * 0.008;
+      skillsVelY = dx * 0.006;
+      skillsVelX = dy * 0.006;
       skillsPrevMousePos = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     }
   }, { passive: true });
@@ -1626,8 +1542,8 @@ function onSkillsMouseMove(e) {
   if (isSkillsDragging && skillsGroup) {
     const dx = e.clientX - skillsPrevMousePos.x;
     const dy = e.clientY - skillsPrevMousePos.y;
-    skillsGroup.rotation.y += dx * 0.008;
-    skillsGroup.rotation.x += dy * 0.008;
+    skillsVelY = dx * 0.006;
+    skillsVelX = dy * 0.006;
     skillsPrevMousePos = { x: e.clientX, y: e.clientY };
   }
 }
@@ -1649,12 +1565,17 @@ function animateSkills3D() {
 
   const elapsedTime = skillsClock.getElapsedTime();
 
-  if (skillsGroup && !isSkillsDragging) {
-    skillsGroup.rotation.y = elapsedTime * 0.15;
-    skillsGroup.rotation.x = Math.sin(elapsedTime * 0.2) * 0.12;
+  if (skillsGroup) {
+    skillsGroup.rotation.y += skillsVelY;
+    skillsGroup.rotation.x += skillsVelX;
+    skillsVelY *= 0.93;
+    skillsVelX *= 0.93;
+
+    if (!isSkillsDragging && Math.abs(skillsVelY) < 0.001) {
+      skillsGroup.rotation.y += 0.003;
+    }
   }
 
-  // Raycast hover
   skillsRaycaster.setFromCamera(skillsMouseVec, skillsCamera);
   const nodeMeshes = skillsNodes.map(n => n.group.children[0]);
   const intersects = skillsRaycaster.intersectObjects(nodeMeshes, true);
@@ -1676,14 +1597,12 @@ function animateSkills3D() {
     if (tooltip) tooltip.classList.remove('show');
   }
 
-  // Update nodes
   skillsNodes.forEach(n => {
     const isHovered = hoveredSkill === n;
-    const targetScale = isHovered ? 1.35 : 1.0;
+    const targetScale = isHovered ? 1.38 : 1.0;
     n.group.scale.lerp(new THREE.Vector3(targetScale, targetScale, targetScale), 0.15);
 
     n.cageMesh.rotation.y = elapsedTime * 0.8;
-    n.cageMesh.rotation.z = elapsedTime * 0.4;
     n.sphereMesh.material.opacity = isHovered ? 1.0 : (n.skill.isCore ? 0.8 : 0.5);
   });
 
@@ -1711,25 +1630,21 @@ function setSkillsView(mode) {
 }
 
 /* =========================================================
-   6. 3D PROJECT CARDS (REALISTIC PERSPECTIVE TILT)
+   6. 3D PROJECT CARDS (WITH TOUCH TILT SUPPORT)
 ========================================================= */
 function initProjectCardsTilt() {
   const cards = document.querySelectorAll('.pc');
   cards.forEach(card => {
     let bounds;
 
-    function onMouseEnter() {
-      bounds = card.getBoundingClientRect();
-    }
-
-    function onMouseMove(e) {
+    function applyTilt(clientX, clientY) {
       if (!bounds) bounds = card.getBoundingClientRect();
-      const mouseX = e.clientX - bounds.left;
-      const mouseY = e.clientY - bounds.top;
+      const mouseX = clientX - bounds.left;
+      const mouseY = clientY - bounds.top;
       const xPct = (mouseX / bounds.width - 0.5) * 2;
       const yPct = (mouseY / bounds.height - 0.5) * 2;
 
-      const rotX = -yPct * 6.5; // Max 6.5 deg tilt
+      const rotX = -yPct * 6.5;
       const rotY = xPct * 6.5;
 
       card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-4px)`;
@@ -1737,13 +1652,21 @@ function initProjectCardsTilt() {
       card.style.setProperty('--gy', `${(mouseY / bounds.height) * 100}%`);
     }
 
-    function onMouseLeave() {
+    card.addEventListener('mouseenter', () => { bounds = card.getBoundingClientRect(); });
+    card.addEventListener('mousemove', e => applyTilt(e.clientX, e.clientY));
+    card.addEventListener('mouseleave', () => {
       card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
-    }
+    });
 
-    card.addEventListener('mouseenter', onMouseEnter);
-    card.addEventListener('mousemove', onMouseMove);
-    card.addEventListener('mouseleave', onMouseLeave);
+    // Touch support for mobile devices
+    card.addEventListener('touchmove', e => {
+      if (e.touches.length === 1) {
+        applyTilt(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    }, { passive: true });
+    card.addEventListener('touchend', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
+    });
   });
 }
 
@@ -1752,13 +1675,11 @@ function initProjectCardsTilt() {
 ========================================================= */
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
-  // Subtle parallax background shift
   if (heroCamera) {
     heroCamera.position.y = (scrollY * 0.002);
   }
 }, { passive: true });
 
-// Initialize everything on window load
 window.addEventListener('load', () => {
   initHeroAICore();
   animateHeroAICore();
