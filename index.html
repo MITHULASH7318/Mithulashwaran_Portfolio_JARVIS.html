@@ -38,11 +38,8 @@ body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--txt);overfl
 .r1{width:200px;height:200px;border-top-color:rgba(0,212,255,.25);border-right-color:rgba(0,212,255,.1);animation:rspin 18s linear infinite}
 .r2{width:155px;height:155px;border-top-color:rgba(0,212,255,.45);border-left-color:rgba(0,212,255,.2);animation:rspin 12s linear infinite reverse}
 .r3{width:110px;height:110px;border-top-color:rgba(0,212,255,.7);border-right-color:rgba(0,212,255,.3);animation:rspin 8s linear infinite}
-/* dots on rings */
 .r1::before,.r2::before,.r3::before{content:'';position:absolute;top:-4px;left:50%;transform:translateX(-50%);width:7px;height:7px;border-radius:50%;background:var(--arc);box-shadow:0 0 16px var(--arc)}
-/* hex center */
 .rhex{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:54px;height:54px;background:radial-gradient(circle,rgba(0,212,255,.35),rgba(0,80,180,.15) 65%,transparent);border:2px solid rgba(0,212,255,.9);clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);box-shadow:0 0 40px rgba(0,212,255,.8),inset 0 0 30px rgba(0,212,255,.3);animation:hpulse 2s ease-in-out infinite}
-/* triangle inside hex */
 .rtri{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:36px;height:36px;border:1px solid rgba(0,212,255,.5);clip-path:polygon(50% 8%,92% 86%,8% 86%);background:rgba(0,150,255,.06)}
 @keyframes rspin{to{transform:translate(-50%,-50%) rotate(360deg)}}
 @keyframes hpulse{0%,100%{box-shadow:0 0 40px rgba(0,212,255,.8),inset 0 0 30px rgba(0,212,255,.3)}50%{box-shadow:0 0 80px rgba(0,212,255,1),inset 0 0 60px rgba(0,212,255,.6)}}
@@ -96,59 +93,13 @@ nav.show{opacity:1;transform:translateY(0)}
 .hsep{width:4px;height:4px;background:var(--arc);border-radius:50%;box-shadow:0 0 8px var(--arc)}
 
 /* 3D HERO AI CORE CONTAINER */
-.hero-3d-stage{
-  position:relative;
-  width:100%;
-  max-width:440px;
-  height:320px;
-  margin:10px auto 24px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-#hero-3d-canvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  cursor:grab;
-  z-index:2;
-}
+.hero-3d-stage{position:relative;width:100%;max-width:440px;height:320px;margin:10px auto 24px;display:flex;align-items:center;justify-content:center}
+#hero-3d-canvas{position:absolute;inset:0;width:100%;height:100%;cursor:grab;z-index:2}
 #hero-3d-canvas:active{cursor:grabbing}
-.hero-3d-hud{
-  position:absolute;
-  bottom:6px;
-  left:50%;
-  transform:translateX(-50%);
-  display:flex;
-  align-items:center;
-  gap:12px;
-  background:rgba(0,16,38,.85);
-  border:1px solid rgba(0,212,255,.3);
-  padding:5px 16px;
-  border-radius:3px;
-  font-family:'Share Tech Mono',monospace;
-  font-size:9px;
-  letter-spacing:2px;
-  color:var(--arc);
-  pointer-events:none;
-  z-index:3;
-  backdrop-filter:blur(6px);
-  white-space:nowrap;
-  box-shadow:0 0 15px rgba(0,212,255,.2);
-}
-.hero-3d-hud-dot{
-  width:6px;height:6px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn);animation:blink 1.5s infinite;
-}
-.hero-3d-brackets{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
-}
-.hero-3d-brackets::before,.hero-3d-brackets::after{
-  content:'';position:absolute;width:18px;height:18px;border-color:rgba(0,212,255,.3);border-style:solid;
-}
+.hero-3d-hud{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;background:rgba(0,16,38,.85);border:1px solid rgba(0,212,255,.3);padding:5px 16px;border-radius:3px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--arc);pointer-events:none;z-index:3;backdrop-filter:blur(6px);white-space:nowrap;box-shadow:0 0 15px rgba(0,212,255,.2)}
+.hero-3d-hud-dot{width:6px;height:6px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn);animation:blink 1.5s infinite}
+.hero-3d-brackets{position:absolute;inset:0;pointer-events:none;z-index:1}
+.hero-3d-brackets::before,.hero-3d-brackets::after{content:'';position:absolute;width:18px;height:18px;border-color:rgba(0,212,255,.3);border-style:solid}
 .hero-3d-brackets::before{top:0;left:0;border-width:2px 0 0 2px}
 .hero-3d-brackets::after{bottom:0;right:0;border-width:0 2px 2px 0}
 
@@ -195,46 +146,11 @@ nav.show{opacity:1;transform:translateY(0)}
 
 /* 3D PROJECT CARDS WITH PERSPECTIVE TILT */
 .pl{display:flex;flex-direction:column;gap:26px;perspective:1200px}
-.pc{
-  position:relative;
-  border:1px solid rgba(0,212,255,.16);
-  background:var(--panel);
-  padding:32px 34px;
-  display:grid;
-  grid-template-columns:1fr 96px;
-  gap:22px;
-  align-items:start;
-  clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));
-  transform-style:preserve-3d;
-  transition:transform .2s ease-out, border-color .3s, box-shadow .3s;
-  will-change:transform;
-}
-.pc::before{
-  content:'';
-  position:absolute;
-  top:0;left:0;
-  width:100%;height:2px;
-  background:linear-gradient(90deg,var(--arc),transparent);
-  transform:scaleX(0);
-  transform-origin:left;
-  transition:transform .4s;
-  z-index:2;
-}
-.pc:hover{
-  border-color:rgba(0,212,255,.45);
-  box-shadow:0 12px 35px rgba(0,10,25,.6),0 0 20px rgba(0,212,255,.12);
-}
+.pc{position:relative;border:1px solid rgba(0,212,255,.16);background:var(--panel);padding:32px 34px;display:grid;grid-template-columns:1fr 96px;gap:22px;align-items:start;clip-path:polygon(0 0,calc(100% - 22px) 0,100% 22px,100% 100%,22px 100%,0 calc(100% - 22px));transform-style:preserve-3d;transition:transform .2s ease-out, border-color .3s, box-shadow .3s;will-change:transform}
+.pc::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--arc),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s;z-index:2}
+.pc:hover{border-color:rgba(0,212,255,.45);box-shadow:0 12px 35px rgba(0,10,25,.6),0 0 20px rgba(0,212,255,.12)}
 .pc:hover::before{transform:scaleX(1)}
-/* Glare overlay */
-.pc-glare{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:radial-gradient(circle 350px at var(--gx, 50%) var(--gy, 50%), rgba(0,212,255,.12), transparent 70%);
-  opacity:0;
-  transition:opacity .3s;
-  z-index:1;
-}
+.pc-glare{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle 350px at var(--gx, 50%) var(--gy, 50%), rgba(0,212,255,.12), transparent 70%);opacity:0;transition:opacity .3s;z-index:1}
 .pc:hover .pc-glare{opacity:1}
 
 .ptag{display:inline-flex;align-items:center;gap:8px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--arc);border:1px solid rgba(0,212,255,.25);background:rgba(0,212,255,.06);padding:4px 12px;margin-bottom:12px}
@@ -250,218 +166,39 @@ nav.show{opacity:1;transform:translateY(0)}
 .plnk{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-decoration:none;padding:14px 12px;border:1px solid rgba(0,212,255,.28);color:var(--arc);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;transition:all .3s;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);height:fit-content;align-self:center;position:relative;z-index:3}
 .plnk svg{width:17px;height:17px}
 .plnk:hover{background:rgba(0,212,255,.1);box-shadow:0 0 20px rgba(0,212,255,.2)}
+/* Stacked link group for projects with 2 links (live + github) */
+.plinks{display:flex;flex-direction:column;gap:10px;align-self:center;position:relative;z-index:3}
+/* Honest-limits note shown on new projects */
+.pnote{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--tdim);border-left:2px solid var(--gold);padding:6px 12px;margin-bottom:16px;line-height:1.7;background:rgba(245,166,35,.04)}
 
 /* 3D INTERACTIVE MULTI-AGENT CONTROL TOWER */
-.agent-3d-wrapper{
-  margin-top:22px;
-  border:1px solid rgba(0,212,255,.25);
-  background:rgba(0,10,25,.88);
-  border-radius:4px;
-  overflow:hidden;
-  position:relative;
-}
-.agent-3d-header{
-  padding:12px 18px;
-  background:rgba(0,20,45,.75);
-  border-bottom:1px solid rgba(0,212,255,.15);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  flex-wrap:wrap;
-  gap:10px;
-}
-.agent-3d-title{
-  font-family:'Orbitron',monospace;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:2px;
-  color:var(--arc);
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.agent-3d-status{
-  font-family:'Share Tech Mono',monospace;
-  font-size:10px;
-  color:var(--grn);
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.agent-pipeline-flow{
-  padding:10px 18px;
-  background:rgba(0,14,32,.9);
-  border-bottom:1px solid rgba(0,212,255,.1);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  font-family:'Share Tech Mono',monospace;
-  font-size:10px;
-  color:var(--tdim);
-  letter-spacing:1.5px;
-  flex-wrap:wrap;
-}
-.agent-pipeline-flow .af-node{
-  padding:3px 8px;
-  border:1px solid rgba(0,212,255,.2);
-  background:rgba(0,212,255,.05);
-  color:var(--arc);
-}
-.agent-pipeline-flow .af-node.core{
-  border-color:var(--arc);
-  color:#fff;
-  background:rgba(0,212,255,.15);
-  box-shadow:0 0 10px rgba(0,212,255,.3);
-}
+.agent-3d-wrapper{margin-top:22px;border:1px solid rgba(0,212,255,.25);background:rgba(0,10,25,.88);border-radius:4px;overflow:hidden;position:relative}
+.agent-3d-header{padding:12px 18px;background:rgba(0,20,45,.75);border-bottom:1px solid rgba(0,212,255,.15);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.agent-3d-title{font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;color:var(--arc);display:flex;align-items:center;gap:10px}
+.agent-3d-status{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--grn);display:flex;align-items:center;gap:8px}
+.agent-pipeline-flow{padding:10px 18px;background:rgba(0,14,32,.9);border-bottom:1px solid rgba(0,212,255,.1);display:flex;align-items:center;justify-content:center;gap:12px;font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--tdim);letter-spacing:1.5px;flex-wrap:wrap}
+.agent-pipeline-flow .af-node{padding:3px 8px;border:1px solid rgba(0,212,255,.2);background:rgba(0,212,255,.05);color:var(--arc)}
+.agent-pipeline-flow .af-node.core{border-color:var(--arc);color:#fff;background:rgba(0,212,255,.15);box-shadow:0 0 10px rgba(0,212,255,.3)}
 .agent-pipeline-flow .af-arr{color:rgba(0,212,255,.5)}
-
-.agent-3d-stage{
-  position:relative;
-  width:100%;
-  height:360px;
-  background:radial-gradient(circle at center, rgba(0,30,65,.5), rgba(2,9,18,.95) 75%);
-}
-#agent-network-canvas{
-  width:100%;
-  height:100%;
-  display:block;
-  cursor:grab;
-}
+.agent-3d-stage{position:relative;width:100%;height:360px;background:radial-gradient(circle at center, rgba(0,30,65,.5), rgba(2,9,18,.95) 75%)}
+#agent-network-canvas{width:100%;height:100%;display:block;cursor:grab}
 #agent-network-canvas:active{cursor:grabbing}
-
-.agent-tooltip-hud{
-  position:absolute;
-  top:16px;
-  right:16px;
-  max-width:280px;
-  background:rgba(0,16,38,.92);
-  border:1px solid var(--arc);
-  box-shadow:0 0 20px rgba(0,212,255,.2);
-  padding:14px 16px;
-  pointer-events:none;
-  backdrop-filter:blur(10px);
-  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
-  transition:all .3s ease;
-  z-index:10;
-}
-.agent-tooltip-hud .ath-name{
-  font-family:'Orbitron',monospace;
-  font-size:11.5px;
-  font-weight:700;
-  color:var(--arc);
-  letter-spacing:1.5px;
-  margin-bottom:6px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.agent-tooltip-hud .ath-tech{
-  font-family:'Share Tech Mono',monospace;
-  font-size:9.5px;
-  color:var(--gold);
-  margin-bottom:6px;
-}
-.agent-tooltip-hud .ath-desc{
-  font-family:'Exo 2',sans-serif;
-  font-size:11.5px;
-  color:var(--txt);
-  line-height:1.5;
-}
-.agent-hud-instruction{
-  position:absolute;
-  bottom:10px;
-  left:16px;
-  font-family:'Share Tech Mono',monospace;
-  font-size:9.5px;
-  letter-spacing:2px;
-  color:var(--tdim);
-  pointer-events:none;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
+.agent-tooltip-hud{position:absolute;top:16px;right:16px;max-width:280px;background:rgba(0,16,38,.92);border:1px solid var(--arc);box-shadow:0 0 20px rgba(0,212,255,.2);padding:14px 16px;pointer-events:none;backdrop-filter:blur(10px);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);transition:all .3s ease;z-index:10}
+.agent-tooltip-hud .ath-name{font-family:'Orbitron',monospace;font-size:11.5px;font-weight:700;color:var(--arc);letter-spacing:1.5px;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.agent-tooltip-hud .ath-tech{font-family:'Share Tech Mono',monospace;font-size:9.5px;color:var(--gold);margin-bottom:6px}
+.agent-tooltip-hud .ath-desc{font-family:'Exo 2',sans-serif;font-size:11.5px;color:var(--txt);line-height:1.5}
+.agent-hud-instruction{position:absolute;bottom:10px;left:16px;font-family:'Share Tech Mono',monospace;font-size:9.5px;letter-spacing:2px;color:var(--tdim);pointer-events:none;display:flex;align-items:center;gap:8px}
 
 /* SKILLS SECTION WITH 3D INTERACTIVE NETWORK */
-.skills-control-bar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:24px;
-  flex-wrap:wrap;
-  gap:14px;
-}
-.skills-mode-toggle{
-  display:flex;
-  gap:10px;
-  background:rgba(0,16,38,.8);
-  border:1px solid rgba(0,212,255,.2);
-  padding:4px;
-}
-.sm-btn{
-  padding:7px 18px;
-  font-family:'Share Tech Mono',monospace;
-  font-size:10px;
-  letter-spacing:2px;
-  background:transparent;
-  border:1px solid transparent;
-  color:var(--tdim);
-  cursor:none;
-  transition:all .3s;
-}
-.sm-btn.active{
-  background:rgba(0,212,255,.15);
-  border-color:var(--arc);
-  color:var(--arc);
-  box-shadow:0 0 10px rgba(0,212,255,.25);
-}
-
-.skills-3d-container{
-  position:relative;
-  width:100%;
-  height:440px;
-  border:1px solid rgba(0,212,255,.2);
-  background:radial-gradient(circle at center, rgba(0,25,55,.6), rgba(2,9,18,.95) 75%);
-  margin-bottom:24px;
-  overflow:hidden;
-  border-radius:4px;
-}
-#skills-3d-canvas{
-  width:100%;
-  height:100%;
-  display:block;
-  cursor:grab;
-}
+.skills-control-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:14px}
+.skills-mode-toggle{display:flex;gap:10px;background:rgba(0,16,38,.8);border:1px solid rgba(0,212,255,.2);padding:4px}
+.sm-btn{padding:7px 18px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;background:transparent;border:1px solid transparent;color:var(--tdim);cursor:none;transition:all .3s}
+.sm-btn.active{background:rgba(0,212,255,.15);border-color:var(--arc);color:var(--arc);box-shadow:0 0 10px rgba(0,212,255,.25)}
+.skills-3d-container{position:relative;width:100%;height:440px;border:1px solid rgba(0,212,255,.2);background:radial-gradient(circle at center, rgba(0,25,55,.6), rgba(2,9,18,.95) 75%);margin-bottom:24px;overflow:hidden;border-radius:4px}
+#skills-3d-canvas{width:100%;height:100%;display:block;cursor:grab}
 #skills-3d-canvas:active{cursor:grabbing}
-.skills-3d-hud{
-  position:absolute;
-  top:16px;
-  left:16px;
-  font-family:'Share Tech Mono',monospace;
-  font-size:10px;
-  letter-spacing:2px;
-  color:var(--arc);
-  pointer-events:none;
-  background:rgba(0,16,38,.85);
-  padding:6px 12px;
-  border-left:2px solid var(--arc);
-}
-.skills-3d-tooltip{
-  position:absolute;
-  bottom:16px;
-  right:16px;
-  background:rgba(0,16,38,.92);
-  border:1px solid var(--arc);
-  padding:10px 16px;
-  font-family:'Orbitron',monospace;
-  font-size:11px;
-  color:var(--tbright);
-  letter-spacing:2px;
-  pointer-events:none;
-  backdrop-filter:blur(8px);
-  opacity:0;
-  transition:opacity .2s ease;
-}
+.skills-3d-hud{position:absolute;top:16px;left:16px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--arc);pointer-events:none;background:rgba(0,16,38,.85);padding:6px 12px;border-left:2px solid var(--arc)}
+.skills-3d-tooltip{position:absolute;bottom:16px;right:16px;background:rgba(0,16,38,.92);border:1px solid var(--arc);padding:10px 16px;font-family:'Orbitron',monospace;font-size:11px;color:var(--tbright);letter-spacing:2px;pointer-events:none;backdrop-filter:blur(8px);opacity:0;transition:opacity .2s ease}
 .skills-3d-tooltip.show{opacity:1}
 
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}
@@ -526,6 +263,7 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
   .eg{grid-template-columns:1fr}
   .cw{grid-template-columns:1fr}
   .pc{grid-template-columns:1fr}
+  .plinks{flex-direction:row;flex-wrap:wrap}
   footer{flex-direction:column;gap:10px;text-align:center;padding:22px}
   .hc{display:none}
   .hero-3d-stage{height:270px;max-width:320px}
@@ -613,7 +351,7 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
       <p>My goal is to move beyond traditional automation and build <strong>AI-driven business systems</strong> that turn repetitive work into intelligent workflows and transform data into actionable business outcomes.</p>
     </div>
     <div class="sw-stats fu">
-      <div class="scard"><div class="snum2">4+</div><div class="slbl">Live AI/ML Projects</div></div>
+      <div class="scard"><div class="snum2">8</div><div class="slbl">Live AI/ML Projects</div></div>
       <div class="scard"><div class="snum2">30%</div><div class="slbl">Pipeline Efficiency Gain</div></div>
       <div class="scard"><div class="snum2">5+</div><div class="slbl">Tech Stacks Mastered</div></div>
       <div class="scard"><div class="snum2">3</div><div class="slbl">Industry Certifications</div></div>
@@ -772,6 +510,88 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
       </a>
     </div>
 
+    <!-- PROJECT 6 (NEW): SUNRISE CLINIC VIRTUAL RECEPTIONIST -->
+    <div class="pc fu">
+      <div class="pc-glare"></div>
+      <div>
+        <div class="ptag"><span class="pdot"></span>LIVE · MULTILINGUAL AI AGENT</div>
+        <div class="ptitle">Sunrise Clinic Virtual Receptionist</div>
+        <p class="pdesc">AI receptionist that books, reschedules and cancels clinic appointments and answers questions in English, Tamil and Hindi — by text or voice.</p>
+        <ul class="phts">
+          <li>The AI only <strong>understands the patient's message</strong>; plain code decides everything that matters — real doctor slots in SQLite, double-booking rules, and booking only after confirmation</li>
+          <li><strong>Emergency words skip the AI</strong> and hand the patient to staff with the 108 ambulance number; it never gives medical advice</li>
+          <li><strong>Model fallback across Groq and Gemini</strong> so a slow or rate-limited provider does not crash the app</li>
+          <li><strong>17 automated tests</strong> pass, including 150 concurrent users; <strong>16 of 16</strong> test conversations passed across English, Tamil, Hindi and mixed speech, at about <strong>$0.0001 per conversation</strong> at paid-plan prices</li>
+        </ul>
+        <div class="pnote">HONEST LIMITS: free hosting, so the first load can take a minute and bookings reset on restart. Portfolio build, not a real clinic system.</div>
+        <div class="trow"><span class="tp">FASTAPI</span><span class="tp">SQLITE</span><span class="tp">GROQ</span><span class="tp">GEMINI</span><span class="tp">MULTILINGUAL NLP</span><span class="tp">VOICE</span><span class="tp">RENDER</span></div>
+      </div>
+      <div class="plinks">
+        <a class="plnk" href="https://clinic-agent-8edl.onrender.com" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          LIVE DEMO
+        </a>
+        <a class="plnk" href="https://github.com/MITHULASH7318/clinic-agent_" target="_blank">
+          <span style="font-size:15px">⚙</span>
+          GITHUB
+        </a>
+      </div>
+    </div>
+
+    <!-- PROJECT 7 (NEW): CROP STRESS WATCH -->
+    <div class="pc fu">
+      <div class="pc-glare"></div>
+      <div>
+        <div class="ptag"><span class="pdot"></span>LIVE · GEOSPATIAL AI</div>
+        <div class="ptitle">Crop Stress Watch — Sentinel-2 Field Triage</div>
+        <p class="pdesc">Finds crop zones doing worse than their neighbours using Sentinel-2 satellite time series, so someone knows which fields to visit first.</p>
+        <ul class="phts">
+          <li>Tested against <strong>synthetic images with planted stress and cloud gaps</strong> — the first version caught only <strong>7%</strong> of planted stress</li>
+          <li>Found and fixed two flaws: peer matching used a green-up date that stress itself had shifted, and stressed zones were pulling the "normal" reference down</li>
+          <li>After fixes: <strong>33% of planted stress found, 91% precision</strong> on test data — still far from good, and the app says so</li>
+          <li>Ran on <strong>real Sentinel-2 imagery of canal-side farmland in Karnataka</strong>; monsoon run lost 5 of 13 time windows to cloud. Flagged zones are candidates to check, not findings</li>
+        </ul>
+        <div class="pnote">HONEST LIMITS: on the dry-season run, a lot of flagged area may be harvest timing or bare fields, not stress. Not yet verified on the ground. Free server, may take a minute to wake up.</div>
+        <div class="trow"><span class="tp">PYTHON</span><span class="tp">SENTINEL-2</span><span class="tp">REMOTE SENSING</span><span class="tp">TIME SERIES</span><span class="tp">ANOMALY DETECTION</span><span class="tp">RENDER</span></div>
+      </div>
+      <div class="plinks">
+        <a class="plnk" href="https://crop-stress-watch.onrender.com" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          LIVE DEMO
+        </a>
+        <a class="plnk" href="https://github.com/MITHULASH7318/crop-stress-watch" target="_blank">
+          <span style="font-size:15px">⚙</span>
+          GITHUB
+        </a>
+      </div>
+    </div>
+
+    <!-- PROJECT 8 (NEW): FITBACK AI GYM RECOVERY -->
+    <div class="pc fu">
+      <div class="pc-glare"></div>
+      <div>
+        <div class="ptag"><span class="pdot"></span>LIVE · WORKFLOW AUTOMATION</div>
+        <div class="ptitle">FitBack AI — Automated Gym Lead Recovery</div>
+        <p class="pdesc">Automation system for gym retention that spots members who stopped visiting and re-engages them with automated follow-ups.</p>
+        <ul class="phts">
+          <li>Built in <strong>two days for a friend's gym</strong> after an automation interview task, using <strong>n8n Cloud and a Telegram bot</strong></li>
+          <li>Identifies <strong>inactive members</strong> and triggers automated follow-up workflows with conditional branching</li>
+          <li>Handles customer data with <strong>security-conscious practices</strong>, with a Streamlit dashboard on top</li>
+        </ul>
+        <div class="trow"><span class="tp">N8N</span><span class="tp">TELEGRAM BOT</span><span class="tp">WORKFLOW AUTOMATION</span><span class="tp">GOOGLE SHEETS</span><span class="tp">GROQ</span><span class="tp">STREAMLIT</span></div>
+      </div>
+      <div class="plinks">
+        <a class="plnk" href="https://fitback-ai-automated-gym-lead-recovery-systemgit-3q9faqe6dpenj.streamlit.app/" target="_blank">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          LIVE DEMO
+        </a>
+        <a class="plnk" href="https://github.com/MITHULASH7318/FitBack-AI-Automated-Gym-Lead-Recovery-System" target="_blank">
+          <span style="font-size:15px">⚙</span>
+          GITHUB
+        </a>
+      </div>
+    </div>
+
   </div>
 </div></div>
 
@@ -800,9 +620,10 @@ footer{position:relative;z-index:10;border-top:1px solid rgba(0,212,255,.09);pad
   <div class="sg" id="skills-grid-wrapper" style="display:none">
     <div class="sc fu"><div class="sci">📊</div><div class="sct">Data Analysis</div><div class="stags"><span class="stg">Excel</span><span class="stg">Power BI</span><span class="stg">Tableau</span><span class="stg">Pandas</span><span class="stg">NumPy</span><span class="stg">Matplotlib</span><span class="stg">Plotly</span><span class="stg">Streamlit</span></div></div>
     <div class="sc fu"><div class="sci">🧠</div><div class="sct">Data Science & ML</div><div class="stags"><span class="stg">Scikit-learn</span><span class="stg">XGBoost</span><span class="stg">Random Forest</span><span class="stg">TensorFlow</span><span class="stg">Neural Networks</span><span class="stg">Logistic Regression</span><span class="stg">SVM</span></div></div>
-    <div class="sc fu"><div class="sci">🤖</div><div class="sct">Gen-AI & Agentic AI</div><div class="stags"><span class="stg">LLMs</span><span class="stg">RAG</span><span class="stg">NLP</span><span class="stg">OpenAI APIs</span><span class="stg">Prompt Engineering</span><span class="stg">AI Agents</span><span class="stg">LangChain</span></div></div>
-    <div class="sc fu"><div class="sci">🗄️</div><div class="sct">Databases</div><div class="stags"><span class="stg">MySQL</span></div></div>
-    <div class="sc fu"><div class="sci">⚡</div><div class="sct">Programming & Tools</div><div class="stags"><span class="stg">Python</span><span class="stg">JavaScript</span><span class="stg">HTML</span><span class="stg">CSS</span><span class="stg">Flask</span><span class="stg">REST APIs</span><span class="stg">JSON</span><span class="stg">Git</span><span class="stg">GitHub</span><span class="stg">N8N</span><span class="stg">Zapier</span></div></div>
+    <div class="sc fu"><div class="sci">🤖</div><div class="sct">Gen-AI & Agentic AI</div><div class="stags"><span class="stg">LLMs</span><span class="stg">RAG</span><span class="stg">NLP</span><span class="stg">OpenAI APIs</span><span class="stg">Groq</span><span class="stg">Gemini</span><span class="stg">Prompt Engineering</span><span class="stg">AI Agents</span><span class="stg">LangChain</span></div></div>
+    <div class="sc fu"><div class="sci">🛰️</div><div class="sct">Geospatial</div><div class="stags"><span class="stg">Sentinel-2</span><span class="stg">Remote Sensing</span><span class="stg">Time Series</span></div></div>
+    <div class="sc fu"><div class="sci">🗄️</div><div class="sct">Databases</div><div class="stags"><span class="stg">MySQL</span><span class="stg">SQLite</span></div></div>
+    <div class="sc fu"><div class="sci">⚡</div><div class="sct">Programming & Tools</div><div class="stags"><span class="stg">Python</span><span class="stg">JavaScript</span><span class="stg">HTML</span><span class="stg">CSS</span><span class="stg">Flask</span><span class="stg">FastAPI</span><span class="stg">REST APIs</span><span class="stg">JSON</span><span class="stg">Git</span><span class="stg">GitHub</span><span class="stg">N8N</span><span class="stg">Zapier</span><span class="stg">Telegram Bot API</span></div></div>
   </div>
 </div></div>
 
@@ -978,7 +799,6 @@ function initHeroAICore() {
   heroAICoreGroup = new THREE.Group();
   heroScene.add(heroAICoreGroup);
 
-  // Mode 0 Meshes (Classic Icosahedron)
   const coreInnerGeo = new THREE.IcosahedronGeometry(1.2, 2);
   const coreInnerMat = new THREE.MeshBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.85 });
   heroCoreInner = new THREE.Mesh(coreInnerGeo, coreInnerMat);
@@ -994,19 +814,16 @@ function initHeroAICore() {
   heroCage = new THREE.Mesh(cageGeo, cageMat);
   heroAICoreGroup.add(heroCage);
 
-  // Mode 1 Mesh: Torus Knot Hyper Core
   const knotGeo = new THREE.TorusKnotGeometry(0.85, 0.28, 64, 16);
   const knotMat = new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true, transparent: true, opacity: 0 });
   heroTorusKnot = new THREE.Mesh(knotGeo, knotMat);
   heroAICoreGroup.add(heroTorusKnot);
 
-  // Mode 2 Mesh: Octahedron Cluster Core
   const octaGeo = new THREE.OctahedronGeometry(1.35, 1);
   const octaMat = new THREE.MeshBasicMaterial({ color: 0xf5a623, wireframe: true, transparent: true, opacity: 0 });
   heroOctaCluster = new THREE.Mesh(octaGeo, octaMat);
   heroAICoreGroup.add(heroOctaCluster);
 
-  // Concentric Orbital Rings
   const ringConfigs = [
     { radius: 2.65, tube: 0.022, rot: [0.6, 0.2, 0.4], speedX: 0.012, speedY: 0.018, color: 0x00d4ff },
     { radius: 3.15, tube: 0.018, rot: [-0.4, 0.8, -0.2], speedX: -0.015, speedY: 0.010, color: 0x0099ee },
@@ -1035,7 +852,6 @@ function initHeroAICore() {
     heroRings.push({ group: ringGroup, speedX: cfg.speedX, speedY: cfg.speedY });
   });
 
-  // Satellite Micro-Nodes
   const satGeo = new THREE.SphereGeometry(0.12, 12, 12);
   const satColors = [0x00ff88, 0x00d4ff, 0xf5a623, 0x0099ee];
   for (let i = 0; i < 4; i++) {
@@ -1050,7 +866,6 @@ function initHeroAICore() {
     });
   }
 
-  // Particle Cloud
   const particleCount = window.innerWidth < 768 ? 120 : 220;
   const particleGeo = new THREE.BufferGeometry();
   const particlePositions = new Float32Array(particleCount * 3);
@@ -1073,7 +888,6 @@ function initHeroAICore() {
   heroParticles = new THREE.Points(particleGeo, particleMat);
   heroAICoreGroup.add(heroParticles);
 
-  // Mouse & Touch Interaction with MODE TRANSFORMATIONS
   const stage = canvas.parentElement;
   stage.addEventListener('mousemove', e => {
     const rect = canvas.getBoundingClientRect();
@@ -1086,7 +900,6 @@ function initHeroAICore() {
     heroMouse.targetX = 0; heroMouse.targetY = 0;
   });
 
-  // Click / Touch Trigger Shape & Style Morph!
   function triggerHeroMorph() {
     heroPulseIntensity = 1.0;
     heroAnimMode = (heroAnimMode + 1) % 3;
@@ -1134,7 +947,6 @@ function animateHeroAICore() {
 
   const speedMultiplier = (heroMouse.isHovered ? 1.8 : 1.0) + heroPulseIntensity * 2.5;
 
-  // Smooth Mode Opacity Transitions
   heroCoreInner.material.opacity = THREE.MathUtils.lerp(heroCoreInner.material.opacity, heroAnimMode === 0 ? 0.85 : 0, 0.1);
   heroCoreOuter.material.opacity = THREE.MathUtils.lerp(heroCoreOuter.material.opacity, heroAnimMode === 0 ? 0.75 : 0, 0.1);
   heroCage.material.opacity = THREE.MathUtils.lerp(heroCage.material.opacity, heroAnimMode === 0 ? 0.28 : 0.08, 0.1);
@@ -1142,11 +954,9 @@ function animateHeroAICore() {
   heroTorusKnot.material.opacity = THREE.MathUtils.lerp(heroTorusKnot.material.opacity, heroAnimMode === 1 ? 0.85 : 0, 0.1);
   heroOctaCluster.material.opacity = THREE.MathUtils.lerp(heroOctaCluster.material.opacity, heroAnimMode === 2 ? 0.85 : 0, 0.1);
 
-  // Group rotation
   heroAICoreGroup.rotation.y = elapsedTime * 0.25 * speedMultiplier + heroMouse.x * 0.8;
   heroAICoreGroup.rotation.x = Math.sin(elapsedTime * 0.2) * 0.15 + heroMouse.y * 0.6;
 
-  // Core pulse scale
   const baseScale = 1 + Math.sin(elapsedTime * 3) * 0.06 + (heroMouse.isHovered ? 0.1 : 0) + heroPulseIntensity * 0.35;
   heroCoreInner.scale.set(baseScale, baseScale, baseScale);
   heroTorusKnot.scale.set(baseScale, baseScale, baseScale);
@@ -1155,13 +965,11 @@ function animateHeroAICore() {
   heroTorusKnot.rotation.x = elapsedTime * 0.8 * speedMultiplier;
   heroOctaCluster.rotation.z = elapsedTime * 0.6 * speedMultiplier;
 
-  // Rings rotation
   heroRings.forEach(r => {
     r.group.rotation.x += r.speedX * speedMultiplier;
     r.group.rotation.y += r.speedY * speedMultiplier;
   });
 
-  // Orbit satellites
   heroSatellites.forEach(sat => {
     sat.angle += sat.speed * speedMultiplier;
     sat.mesh.position.x = Math.cos(sat.angle) * sat.radius;
@@ -1169,7 +977,6 @@ function animateHeroAICore() {
     sat.mesh.position.z = Math.sin(sat.angle) * sat.radius;
   });
 
-  // Particle cloud rotation
   if (heroParticles) {
     heroParticles.rotation.y = -elapsedTime * 0.12 * speedMultiplier;
   }
@@ -1185,7 +992,7 @@ let agentNodes = [], agentLines = [], agentPackets = [];
 let agentRaycaster, agentMouseVec;
 let hoveredAgent = null;
 let isAgentDragging = false, agentPrevMousePos = { x: 0, y: 0 };
-let agentVelX = 0, agentVelY = 0; // Rotational velocity for physics inertia
+let agentVelX = 0, agentVelY = 0;
 
 const AGENT_DATA = [
   { id: 'core', name: 'AI CORE / LLM COORDINATOR', tech: 'GROQ // LLAMA 3.3 ORCHESTRATION', desc: 'Central cognitive engine analyzing real-time dispatch orders, orchestrating specialized sub-agents, and resolving multi-constraint logistics bottlenecks.', pos: [0, 0, 0], size: 1.25, color: 0x00d4ff, isCore: true },
@@ -1266,7 +1073,6 @@ function initAgentNetwork() {
     }
   });
 
-  // Mouse & Touch Controls with Inertia
   canvas.addEventListener('mousemove', onAgentMouseMove);
   canvas.addEventListener('mousedown', e => {
     isAgentDragging = true;
@@ -1275,7 +1081,6 @@ function initAgentNetwork() {
   window.addEventListener('mouseup', () => { isAgentDragging = false; });
   canvas.addEventListener('click', triggerAgentSurge);
 
-  // Touch for Mobile
   canvas.addEventListener('touchstart', e => {
     if (e.touches.length === 1) {
       isAgentDragging = true;
@@ -1317,7 +1122,6 @@ function triggerAgentSurge() {
     hoveredAgent.baseScale = 1.55;
     updateAgentHUD(hoveredAgent.data);
   }
-  // Energy packet surge across all lines
   agentPackets.forEach(p => { p.speed = 0.035; });
   setTimeout(() => {
     agentPackets.forEach(p => { p.speed = 0.008 + Math.random() * 0.006; });
@@ -1352,10 +1156,9 @@ function animateAgentNetwork() {
   const group = agentScene.getObjectByName('networkGroup');
 
   if (group) {
-    // Apply rotational inertia physics
     group.rotation.y += agentVelY;
     group.rotation.x += agentVelX;
-    agentVelY *= 0.93; // Friction decay
+    agentVelY *= 0.93;
     agentVelX *= 0.93;
 
     if (!isAgentDragging && Math.abs(agentVelY) < 0.001) {
@@ -1363,7 +1166,6 @@ function animateAgentNetwork() {
     }
   }
 
-  // Raycast hover
   agentRaycaster.setFromCamera(agentMouseVec, agentCamera);
   const nodeMeshes = agentNodes.map(n => n.group.children[0]);
   const intersects = agentRaycaster.intersectObjects(nodeMeshes, true);
@@ -1379,7 +1181,6 @@ function animateAgentNetwork() {
     hoveredAgent = null;
   }
 
-  // Nodes animation
   agentNodes.forEach(n => {
     if (n.baseScale > 1) n.baseScale -= 0.02;
 
@@ -1393,13 +1194,11 @@ function animateAgentNetwork() {
     n.sphereMesh.material.opacity = isHovered ? 0.95 : (n.data.isCore ? 0.75 : 0.45);
   });
 
-  // Lines glow
   agentLines.forEach(l => {
     const isConnectedHover = hoveredAgent && (hoveredAgent.group === l.targetNode || hoveredAgent.data.isCore);
     l.lineMesh.material.opacity = isConnectedHover ? 0.95 : 0.35;
   });
 
-  // Data packets
   agentPackets.forEach(p => {
     p.progress += p.speed;
     if (p.progress > 1) p.progress = 0;
@@ -1410,7 +1209,7 @@ function animateAgentNetwork() {
 }
 
 /* =========================================================
-   5. INTERACTIVE 3D SKILLS CONSTELLATION (WITH CLUSTER ILLUMINATION)
+   5. INTERACTIVE 3D SKILLS CONSTELLATION
 ========================================================= */
 let skillsScene, skillsCamera, skillsRenderer, skillsGroup;
 let skillsNodes = [], skillsLines = [];
@@ -1433,7 +1232,10 @@ const SKILL_ITEMS = [
   { name: 'OpenCV', cat: 'ml', pos: [3.3, 0.9, 0.9], size: 0.55, color: 0x00d4ff },
   { name: 'SQL', cat: 'data', pos: [-3.2, 0.6, 0.5], size: 0.58, color: 0xf5a623 },
   { name: 'Power BI', cat: 'data', pos: [-0.4, -3.1, -0.6], size: 0.58, color: 0xf5a623 },
-  { name: 'Git / GitHub', cat: 'prog', pos: [0.8, 1.8, -2.2], size: 0.55, color: 0x0099ee }
+  { name: 'Git / GitHub', cat: 'prog', pos: [0.8, 1.8, -2.2], size: 0.55, color: 0x0099ee },
+  { name: 'FastAPI', cat: 'prog', pos: [-3.0, -2.0, -0.4], size: 0.55, color: 0x0099ee },
+  { name: 'n8n Automation', cat: 'prog', pos: [3.0, -1.8, -1.2], size: 0.55, color: 0x0099ee },
+  { name: 'Sentinel-2 / Geospatial', cat: 'ml', pos: [1.8, 2.5, 1.4], size: 0.55, color: 0x00d4ff }
 ];
 
 function initSkills3D() {
@@ -1490,7 +1292,8 @@ function initSkills3D() {
     [4, 5], [4, 6], [6, 7],
     [2, 3], [3, 8], [3, 9],
     [1, 6], [1, 2],
-    [11, 12], [2, 11]
+    [11, 12], [2, 11],
+    [1, 14], [6, 15], [2, 16]
   ];
 
   connections.forEach(([i, j]) => {
@@ -1658,7 +1461,6 @@ function initProjectCardsTilt() {
       card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)';
     });
 
-    // Touch support for mobile devices
     card.addEventListener('touchmove', e => {
       if (e.touches.length === 1) {
         applyTilt(e.touches[0].clientX, e.touches[0].clientY);
